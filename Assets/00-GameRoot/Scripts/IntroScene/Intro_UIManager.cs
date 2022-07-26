@@ -2,11 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
+
 
 public class Intro_UIManager : UIManager
 {
     bool _showTitleScreen = true;
-    bool _showSettingScreen, _showPlayOptions, _showDifficultyOptions, _showAdvancedPlayOptions;
+    bool _showSettings, _showPlayOptions, _showDifficultyOptions, _showAdvancedPlayOptions; //pregame
+    bool _showPauseScreen, _showGameOverScreen; //ingame
+    bool _activeGame;
+
+    [SerializeField]
+    TextMeshProUGUI _txtInformation, _txtRedTeamScore, _txtBlueTeamScore, _txtWinner;
+
+
     [SerializeField]
     GameData data;
     private void Start()
@@ -25,31 +34,47 @@ public class Intro_UIManager : UIManager
 
     public override void SetUI()
     { /*
-        _childPanels[0] : Title Screen
-        _childPanels[1] : Settings Screen
-        _childPanels[2] : Settings Screen
+        _childPanels[0] : Title
+        _childPanels[1] : Settings
+        _childPanels[2] : Game Modes
+        _childPanels[3] : Difficulty [scrap]
+        _childPanels[4] : AdvancedOptions [scrap]
+        _childPanels[5] : Pause
+        _childPanels[6] : GameOver
 
       */
 
         _childPanels[0].SetActive(_showTitleScreen);
-        _childPanels[1].SetActive(_showSettingScreen);
+        _childPanels[1].SetActive(_showSettings);
         _childPanels[2].SetActive(_showPlayOptions); 
         _childPanels[3].SetActive(_showDifficultyOptions);
         _childPanels[4].SetActive(_showAdvancedPlayOptions);
+
+        _childPanels[5].SetActive(_showPauseScreen);
+        _childPanels[6].SetActive(_showGameOverScreen);
     }
     public void Leave()
     {
         _showTitleScreen = true;
-        _showSettingScreen = false;
+        _showSettings = false;
         _showPlayOptions = false;
         _showDifficultyOptions = false;
         _showAdvancedPlayOptions = false;
         SetUI();
     }
 
+    void StartGame()
+    {
+        GameManager.Static_StartGame();
+        GameManager.updateUI += UpdateScores;
+        GameManager.endGame += EndGame;
+
+        _showDifficultyOptions = false;
+        SetUI();
+    }
     public void ShowSettingsMenu()
     {
-        _showSettingScreen = true;
+        _showSettings = true;
         _showTitleScreen = false;
         SetUI();
     }
@@ -79,7 +104,7 @@ public class Intro_UIManager : UIManager
 
     public void LoadMultiPlayer()
     {
-        SceneManager.LoadScene(1);
+        StartGame();
     }
 
     public void LoadSinglePlayer(int depth)
@@ -88,7 +113,7 @@ public class Intro_UIManager : UIManager
         GameData.STATIC_LoadMinMaxScript(true);
 
 
-        SceneManager.LoadScene(1);
+        StartGame();
 
 
     }
@@ -105,8 +130,51 @@ public class Intro_UIManager : UIManager
 
         GameData.STATIC_SetAIBattle(true);
 
-        SceneManager.LoadScene(1);
+        StartGame();
     }
+
+    #region in-game
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape) && _activeGame)
+            Pause();
+    }
+    public void Pause()
+    {
+        _showSettings = false;
+        _showPauseScreen = true;
+        Time.timeScale = 0;
+        SetUI();
+    }
+    public void Play()
+    {
+        _showPauseScreen = false;
+        Time.timeScale = 1;
+        SetUI();
+
+    }
+    void EndGame()
+    {
+        _showGameOverScreen = true;
+        _showPauseScreen = false;
+        _showSettings = false;
+        SetUI();
+
+        string winningTeam = GameManager.redTeamWon ? "red" : "blue";
+        Color vertexColor = GameManager.redTeamWon ? new Color32(210, 95, 64, 255) : new Color32(80, 124, 159, 255);
+        _txtWinner.text = winningTeam + " team Won!";
+        _txtWinner.color = vertexColor;
+
+        GameManager.endGame -= EndGame;
+    }
+    void UpdateScores()
+    {
+        _txtBlueTeamScore.text = GameManager.blueTeamScore.ToString();
+        _txtRedTeamScore.text = GameManager.redTeamScore.ToString();
+    }
+    #endregion
+
 
     public void AdvancedPlayer()
     {
@@ -115,6 +183,6 @@ public class Intro_UIManager : UIManager
         GameData.STATIC_LoadMachineLearningScript(true);
 
 
-        SceneManager.LoadScene(1);
+        StartGame();
     }
 }

@@ -29,22 +29,6 @@ public class GameManager : MonoBehaviour
     {
         instance = this;
 
-        _blueTeamScore = _redTeamScore = 0;
-
-        if (GameData.loadMinMaxScript)
-            gameObject.AddComponent<MiniMax>();
-
-        if (GameData.loadMachineLearningScript)
-            gameObject.AddComponent<Brain>();
-
-        Board board = GetComponent<Board>();
-       _unitManager = GetComponent<UnitManager>();
-
-        board.Create();
-        _unitManager.Setup(board);
-
-        SetAIEvaluationStatus(false);
-
     }
 
     private void Update()
@@ -107,6 +91,24 @@ public class GameManager : MonoBehaviour
     void Play()
     {
         StartCoroutine(WaitToPlay());
+    } 
+    void StartGame()
+    {
+        _blueTeamScore = _redTeamScore = 0;
+
+        if (GameData.loadMinMaxScript)
+            gameObject.AddComponent<MiniMax>();
+
+        if (GameData.loadMachineLearningScript)
+            gameObject.AddComponent<Brain>();
+
+        Board board = GetComponent<Board>();
+        _unitManager = GetComponent<UnitManager>();
+
+        board.Create();
+        _unitManager.Setup(board);
+
+        SetAIEvaluationStatus(false);
     }
    
 
@@ -126,6 +128,7 @@ public class GameManager : MonoBehaviour
     {
         _aiEvaluationInProgress = status;
     }
+
     public static void STATIC_SetAIEvaluationStatus(bool status)
     {
         instance.SetAIEvaluationStatus(status);
@@ -143,5 +146,9 @@ public class GameManager : MonoBehaviour
     public static void Static_Play()
     {
         instance.Play();
+    } 
+    public static void Static_StartGame()
+    {
+        instance.StartGame();
     }
 }

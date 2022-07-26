@@ -65,7 +65,7 @@ public class Board : MonoBehaviour
                 int finalX = x  + offset;
                 Tile tile = allTiles[finalX, y];
                 if (tile!=null)
-                    tile.GetComponent<Renderer>().material.color = new Color32(230, 220, 187, 255);
+                    tile.GetComponent<Renderer>().material.color = new Color32(219,202,216, 255);
             }
         }
 
