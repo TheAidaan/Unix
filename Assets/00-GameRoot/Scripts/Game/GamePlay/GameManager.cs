@@ -24,6 +24,9 @@ public class GameManager : MonoBehaviour
     public static event Action play;
     public static event Action endGame;
 
+    [SerializeField]
+    Camera Game;
+
 
     private void Awake()
     {
@@ -36,7 +39,7 @@ public class GameManager : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = Game.ScreenPointToRay(Input.mousePosition);
 
             if (Physics.Raycast(ray, out hit, 100f))
             {

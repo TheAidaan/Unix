@@ -170,7 +170,8 @@ public abstract class BaseUnit : MonoBehaviour
     }
 
     public void Clicked()
-    {       
+    {
+        Debug.Log("clicked");
         TransitionToState(hoverState);
     }
 
