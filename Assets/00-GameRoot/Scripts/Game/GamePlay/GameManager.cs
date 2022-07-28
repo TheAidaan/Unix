@@ -97,7 +97,15 @@ public class GameManager : MonoBehaviour
     } 
     void StartGame()
     {
-        _blueTeamScore = _redTeamScore = 0;
+        while (transform.childCount > 0)
+        {
+            DestroyImmediate(transform.GetChild(0).gameObject);
+        }
+
+        _blueTeamScore = 0;
+        _redTeamScore = 0;
+
+        updateUI?.Invoke();
 
         if (GameData.loadMinMaxScript)
             gameObject.AddComponent<MiniMax>();

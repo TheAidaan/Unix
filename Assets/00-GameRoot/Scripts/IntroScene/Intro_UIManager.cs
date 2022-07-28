@@ -8,7 +8,7 @@ using TMPro;
 public class Intro_UIManager : UIManager
 {
     bool _showTitleScreen = true;
-    bool _showSettings, _showPlayOptions, _showDifficultyOptions, _showAdvancedPlayOptions; //pregame
+    bool _showSettings, _showGameModes, _showDifficultyOptions, _showAdvancedPlayOptions; //pregame
     bool _showPauseScreen, _showGameOverScreen; //ingame
     bool _activeGame;
 
@@ -29,6 +29,8 @@ public class Intro_UIManager : UIManager
         GameData.STATIC_SetGeneticAIColor(Color.white);
         GameData.STATIC_SetPlayerColor(Color.white);
 
+        _txtRedTeamScore.transform.parent.gameObject.SetActive(false);
+        _txtBlueTeamScore.transform.parent.gameObject.SetActive(false);
 
     }
 
@@ -46,41 +48,84 @@ public class Intro_UIManager : UIManager
 
         _childPanels[0].SetActive(_showTitleScreen);
         _childPanels[1].SetActive(_showSettings);
-        _childPanels[2].SetActive(_showPlayOptions); 
+        _childPanels[2].SetActive(_showGameModes); 
         _childPanels[3].SetActive(_showDifficultyOptions);
         _childPanels[4].SetActive(_showAdvancedPlayOptions);
 
         _childPanels[5].SetActive(_showPauseScreen);
         _childPanels[6].SetActive(_showGameOverScreen);
     }
-    public void Leave()
+    public void Leave()  
     {
+
         _showTitleScreen = true;
         _showSettings = false;
-        _showPlayOptions = false;
+        _showGameModes = false;
         _showDifficultyOptions = false;
         _showAdvancedPlayOptions = false;
         SetUI();
-    }
+    }           //to do
 
-    void StartGame()
+    public void StartGame()
     {
-        GameManager.Static_StartGame();
+
+
+        _txtRedTeamScore.transform.parent.gameObject.SetActive(true);
+        _txtBlueTeamScore.transform.parent.gameObject.SetActive(true);
         GameManager.updateUI += UpdateScores;
         GameManager.endGame += EndGame;
 
+        _showGameModes = false;
         _showDifficultyOptions = false;
+
+        _activeGame = true;
+
         SetUI();
+        GameManager.Static_StartGame();
+    }               //main
+
+    #region GameModes
+    public void LoadMultiPlayer()
+    {
+        StartGame();
     }
+    public void LoadSinglePlayer(int depth)
+    {
+        GameData.STATIC_SetMinMaxDepth(depth);
+        GameData.STATIC_LoadMinMaxScript(true);
+
+
+        StartGame();
+    }
+
+    public void AdvancedPlayer()
+    {
+        GameData.STATIC_SetBoardLength(10);
+        GameData.STATIC_GenerateBoard(true);
+        GameData.STATIC_LoadMachineLearningScript(true);
+
+
+        StartGame();
+    }
+
+    #endregion
+
+
     public void ShowSettingsMenu()
     {
         _showSettings = true;
-        _showTitleScreen = false;
+        if(_showTitleScreen)
+            _showTitleScreen = false;
+        
+        if(_showPauseScreen)
+            _showPauseScreen = false;
+
         SetUI();
-    }
+    }       //done
+
     public void ShowPlayOptions()
     {
-        _showPlayOptions = true;
+        _showGameModes = true;
         _showTitleScreen = false;
         SetUI();
     }
@@ -89,34 +134,22 @@ public class Intro_UIManager : UIManager
     public void ShowDifficultyOptions()
     {
         _showDifficultyOptions = true;
-        _showPlayOptions = false;
+        _showGameModes = false;
         SetUI();
     }
 
     public void ShowAdvancedPlayOptions()
     {
         _showAdvancedPlayOptions = true;
-        _showPlayOptions = false;
+        _showGameModes = false;
         SetUI();
     }
 
     // Fuctions used for game to start Playing
 
-    public void LoadMultiPlayer()
-    {
-        StartGame();
-    }
-
-    public void LoadSinglePlayer(int depth)
-    {
-        GameData.STATIC_SetMinMaxDepth(depth);
-        GameData.STATIC_LoadMinMaxScript(true);
 
 
-        StartGame();
-
-
-    }
+  
 
     public void SpectatorPlayer()
     {
@@ -176,13 +209,5 @@ public class Intro_UIManager : UIManager
     #endregion
 
 
-    public void AdvancedPlayer()
-    {
-        GameData.STATIC_SetBoardLength(10);
-        GameData.STATIC_GenerateBoard(true);
-        GameData.STATIC_LoadMachineLearningScript(true);
-
-
-        StartGame();
-    }
+  
 }

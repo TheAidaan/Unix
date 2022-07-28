@@ -20,7 +20,6 @@ public class MiniMax : AI
         }
         GameData.STATIC_SetMinMaxColor(teamColor);
         string color = teamColor == Color.red ? "red" : "blue";
-        Debug.Log("MiniMax is playing as the " + color + " team");
     }
 
     public override void Play()
