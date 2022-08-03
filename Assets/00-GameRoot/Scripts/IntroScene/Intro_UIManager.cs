@@ -5,12 +5,12 @@ using UnityEngine.SceneManagement;
 using TMPro;
 
 
-public class Intro_UIManager : UIManager
+
+public class Intro_UIManager : UIManager_Base
 {
     bool _showTitleScreen = true;
     bool _showSettings, _showGameModes, _showDifficultyOptions, _showAdvancedPlayOptions; //pregame
     bool _showPauseScreen, _showGameOverScreen; //ingame
-    bool _activeGame;
 
     [SerializeField]
     TextMeshProUGUI _txtInformation, _txtRedTeamScore, _txtBlueTeamScore, _txtWinner;
@@ -32,6 +32,7 @@ public class Intro_UIManager : UIManager
         _txtRedTeamScore.transform.parent.gameObject.SetActive(false);
         _txtBlueTeamScore.transform.parent.gameObject.SetActive(false);
 
+       
     }
 
     public override void SetUI()
@@ -55,6 +56,16 @@ public class Intro_UIManager : UIManager
         _childPanels[5].SetActive(_showPauseScreen);
         _childPanels[6].SetActive(_showGameOverScreen);
     }
+
+    public void ChangeBackground(bool switchToDark)
+    {
+        if(switchToDark)
+            UXManager.Static_DarkMode();
+        else
+            UXManager.Static_LightMode();
+
+    }
+
     public void Leave()  
     {
 
@@ -69,7 +80,6 @@ public class Intro_UIManager : UIManager
     public void StartGame()
     {
 
-
         _txtRedTeamScore.transform.parent.gameObject.SetActive(true);
         _txtBlueTeamScore.transform.parent.gameObject.SetActive(true);
         GameManager.updateUI += UpdateScores;
@@ -77,8 +87,6 @@ public class Intro_UIManager : UIManager
 
         _showGameModes = false;
         _showDifficultyOptions = false;
-
-        _activeGame = true;
 
         SetUI();
         GameManager.Static_StartGame();
@@ -170,7 +178,7 @@ public class Intro_UIManager : UIManager
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && _activeGame)
+        if (Input.GetKeyDown(KeyCode.Escape) && GameManager.activeGame)
             Pause();
     }
     public void Pause()

@@ -3,6 +3,9 @@ using System;
 using System.Collections;
 public class GameManager : MonoBehaviour
 {
+    static bool _activeGame;
+    public static bool activeGame { get { return _activeGame; } }
+
     public static GameManager instance;
 
     UnitManager _unitManager;
@@ -24,9 +27,6 @@ public class GameManager : MonoBehaviour
     public static event Action play;
     public static event Action endGame;
 
-    [SerializeField]
-    Camera Game;
-
 
     private void Awake()
     {
@@ -36,10 +36,10 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && _activeGame)
         {
             RaycastHit hit;
-            Ray ray = Game.ScreenPointToRay(Input.mousePosition);
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
             if (Physics.Raycast(ray, out hit, 100f))
             {
@@ -87,6 +87,7 @@ public class GameManager : MonoBehaviour
         if (_gameOver)
         {
             endGame?.Invoke();
+            _activeGame = false;
         }
 
     }
@@ -97,6 +98,8 @@ public class GameManager : MonoBehaviour
     } 
     void StartGame()
     {
+        UXManager.Static_SwitchCameras();
+        _activeGame = true;
         while (transform.childCount > 0)
         {
             DestroyImmediate(transform.GetChild(0).gameObject);
