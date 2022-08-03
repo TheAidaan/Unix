@@ -6,7 +6,7 @@ using TMPro;
 
 
 
-public class Intro_UIManager : UIManager_Base
+public class UIManager : UIManager_Base
 {
     bool _showTitleScreen = true;
     bool _showSettings, _showGameModes, _showDifficultyOptions, _showAdvancedPlayOptions; //pregame

@@ -33,12 +33,12 @@ public abstract class UIManager_Base : MonoBehaviour
         Application.Quit();
     }
 
-    public void SetSoundVolume(float volume)
+    public void SetSoundVolume(int volume)
     {
-        AudioManager.Static_SetSoundVolume(volume);
+        UXManager.Static_SetSoundVolume(volume);
     }
-    public void SetMusicVolume(float volume)
+    public void SetMusicVolume(int volume)
     {
-        AudioManager.Static_SetMusicVolume(volume);
+        UXManager.Static_SetMusicVolume(volume);
     }
 }

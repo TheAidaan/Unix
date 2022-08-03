@@ -1,5 +1,7 @@
 using UnityEngine;
 using Cinemachine;
+using UnityEngine.Audio;
+
 
 public class UXManager : MonoBehaviour
 {
@@ -13,9 +15,14 @@ public class UXManager : MonoBehaviour
     Color _dark = new Color(0.29f, 0.29f, 0.29f, 1);
     Color _light = new Color(1, 1, 1, 1);
 
+    AudioMixer _audio;
+    static float _musicVolume, _soundMusic;
+    public static float MusicVolume { get { return _musicVolume; } }
+    public static float SoundVolume { get { return _soundMusic; } }
     void Awake()
     {
         instance = this;
+
     }
     // Start is called before the first frame update
     void Start()
@@ -34,6 +41,11 @@ public class UXManager : MonoBehaviour
         }
 
         _mainCamera = GetComponentInChildren<Camera>();
+
+        _audio = Resources.Load<AudioMixer>("Audio");
+
+        _audio.GetFloat("MusicVolume", out _musicVolume);   //get the volume for music
+        _audio.GetFloat("SoundVolume", out _soundMusic);    //get the volume for sound
     }
 
     void SwitchCameras()
@@ -81,6 +93,25 @@ public class UXManager : MonoBehaviour
     public static void Static_LightMode()
     {
         instance.LightMode();
+    }
+
+    void SetVolume(string mixerGroup, float SliderValue)
+    {
+        _audio.SetFloat(mixerGroup, ConvertToLog(SliderValue));
+    }
+
+    float ConvertToLog(float value)
+    {
+        return Mathf.Log10(value) * 20;
+    }
+
+    public static void Static_SetSoundVolume(float value)
+    {
+        instance.SetVolume("SoundVolume", value);
+    }
+    public static void Static_SetMusicVolume(float value)
+    {
+        instance.SetVolume("MusicVolume", value);
     }
 
 }
