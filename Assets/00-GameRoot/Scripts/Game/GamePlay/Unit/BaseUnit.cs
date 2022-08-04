@@ -176,7 +176,7 @@ public abstract class BaseUnit : MonoBehaviour
 
     public void Drag()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = UXManager.mainCamera.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit)) // did the ray hit anything?
         {
             transform.position = new Vector3(hit.point.x, transform.position.y, hit.point.z);// follow the ray(the cursor)

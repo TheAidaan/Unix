@@ -13,7 +13,7 @@ public class UIManager : UIManager_Base
     bool _showPauseScreen, _showGameOverScreen; //ingame
 
     [SerializeField]
-    TextMeshProUGUI _txtInformation, _txtRedTeamScore, _txtBlueTeamScore, _txtWinner;
+    TextMeshProUGUI _txtTitle, _txtRedTeamScore, _txtBlueTeamScore, _txtWinner;
 
 
     [SerializeField]
@@ -28,6 +28,7 @@ public class UIManager : UIManager_Base
         GameData.STATIC_SetMinMaxColor(Color.white);
         GameData.STATIC_SetGeneticAIColor(Color.white);
         GameData.STATIC_SetPlayerColor(Color.white);
+        GameManager.Static_StartGame(false);
 
         _txtRedTeamScore.transform.parent.gameObject.SetActive(false);
         _txtBlueTeamScore.transform.parent.gameObject.SetActive(false);
@@ -82,15 +83,21 @@ public class UIManager : UIManager_Base
 
         _txtRedTeamScore.transform.parent.gameObject.SetActive(true);
         _txtBlueTeamScore.transform.parent.gameObject.SetActive(true);
+        _txtTitle.gameObject.SetActive(false);
+
         GameManager.updateUI += UpdateScores;
         GameManager.endGame += EndGame;
 
         _showGameModes = false;
         _showDifficultyOptions = false;
+        _showAdvancedPlayOptions = false;
+
 
         SetUI();
-        GameManager.Static_StartGame();
-    }               //main
+        GameManager.Static_StartGame(true);
+    }  
+    
+             //main
 
     #region GameModes
     public void LoadMultiPlayer()
@@ -106,11 +113,22 @@ public class UIManager : UIManager_Base
         StartGame();
     }
 
+    public void ComplexBoard(bool loadComplexBoard)
+    {
+        if (loadComplexBoard)
+            GameData.STATIC_SetBoardLength(10);
+        else
+            GameData.STATIC_SetBoardLength(8);
+
+        GameData.STATIC_GenerateBoard(loadComplexBoard);
+
+    }
+
     public void AdvancedPlayer()
     {
-        GameData.STATIC_SetBoardLength(10);
-        GameData.STATIC_GenerateBoard(true);
         GameData.STATIC_LoadMachineLearningScript(true);
+        GameData.STATIC_LoadMinMaxScript(false);
+
 
 
         StartGame();
@@ -154,10 +172,6 @@ public class UIManager : UIManager_Base
     }
 
     // Fuctions used for game to start Playing
-
-
-
-  
 
     public void SpectatorPlayer()
     {

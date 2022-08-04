@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && _activeGame)
         {
             RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = UXManager.mainCamera.ScreenPointToRay(Input.mousePosition);
 
             if (Physics.Raycast(ray, out hit, 100f))
             {
@@ -96,10 +96,12 @@ public class GameManager : MonoBehaviour
     {
         StartCoroutine(WaitToPlay());
     } 
-    void StartGame()
+    void StartGame( bool activeGame)
     {
+        if (activeGame)
         UXManager.Static_SwitchCameras();
-        _activeGame = true;
+        _activeGame = activeGame;
+
         while (transform.childCount > 0)
         {
             DestroyImmediate(transform.GetChild(0).gameObject);
@@ -161,8 +163,8 @@ public class GameManager : MonoBehaviour
     {
         instance.Play();
     } 
-    public static void Static_StartGame()
+    public static void Static_StartGame(bool activeGame)
     {
-        instance.StartGame();
+        instance.StartGame(activeGame);
     }
 }

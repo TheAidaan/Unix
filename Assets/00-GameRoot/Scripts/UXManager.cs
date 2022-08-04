@@ -7,11 +7,12 @@ public class UXManager : MonoBehaviour
 {
     public static UXManager instance;
 
-    CinemachineVirtualCamera[] _cameras = new CinemachineVirtualCamera[2];
+    CinemachineVirtualCamera[] _cameras = new CinemachineVirtualCamera[3];
 
     bool _introCamerInView = true;
     //[SerializeField]
-    Camera _mainCamera;
+    static Camera _mainCamera;
+    public static Camera mainCamera{ get { return _mainCamera; } }
     Color _dark = new Color(0.29f, 0.29f, 0.29f, 1);
     Color _light = new Color(1, 1, 1, 1);
 
@@ -53,7 +54,11 @@ public class UXManager : MonoBehaviour
         if (_introCamerInView)
         {
             _cameras[0].Priority = 0;
-            _cameras[1].Priority = 1;
+
+            if(GameData.boardLength>8)
+                _cameras[2].Priority = 1;
+            else
+                _cameras[1].Priority = 1;
 
             _introCamerInView = false;
 
@@ -61,12 +66,15 @@ public class UXManager : MonoBehaviour
         else
         {
             _cameras[0].Priority = 1;
-            _cameras[1].Priority = 0;
-
+            if (GameData.boardLength > 8)
+                _cameras[2].Priority = 0;
+            else
+                _cameras[1].Priority = 0;
+            
 
             _introCamerInView = true;
-
         }
+
     }
 
     void DarkMode()
