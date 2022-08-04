@@ -52,6 +52,9 @@ public class MiniMax : AI
 
             foreach (BaseUnit unit in aiUnits)
             {
+                if (GameManager.gameOver)
+                    break;
+
                 List<Tile> ValidMmoves = CheckValidMoves(unit); //every unit gets their moves checked to see if they have valid moves
 
                 if (ValidMmoves != null) //if they have valid moves
@@ -96,6 +99,9 @@ public class MiniMax : AI
 
             foreach (BaseUnit unit in otherUnits)
             {
+                if (GameManager.gameOver)
+                    break;
+
                 List<Tile> ValidMmoves = CheckValidMoves(unit); //working with the fact that the other has just gone; 
 
                 if (ValidMmoves != null)

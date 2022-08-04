@@ -21,14 +21,18 @@ public class UIManager : UIManager_Base
     private void Start()
     {
         GameData.STATIC_SetBoardLength(8);
-        GameData.STATIC_LoadMinMaxScript(false);
+        GameData.STATIC_LoadMinMaxScript(true);
         GameData.STATIC_GenerateBoard(false);
-        GameData.STATIC_SetAIBattle(false);
-        GameData.STATIC_LoadMachineLearningScript(false);
+        GameData.STATIC_SetAIBattle(true);
+        GameData.STATIC_LoadMachineLearningScript(true);
         GameData.STATIC_SetMinMaxColor(Color.white);
         GameData.STATIC_SetGeneticAIColor(Color.white);
         GameData.STATIC_SetPlayerColor(Color.white);
         GameManager.Static_StartGame(false);
+
+        GameData.STATIC_SetMinMaxDepth(2);
+
+
 
         _txtRedTeamScore.transform.parent.gameObject.SetActive(false);
         _txtBlueTeamScore.transform.parent.gameObject.SetActive(false);
@@ -42,9 +46,9 @@ public class UIManager : UIManager_Base
         _childPanels[1] : Settings
         _childPanels[2] : Game Modes
         _childPanels[3] : Difficulty [scrap]
-        _childPanels[4] : AdvancedOptions [scrap]
-        _childPanels[5] : Pause
-        _childPanels[6] : GameOver
+
+        _childPanels[4] : Pause
+        _childPanels[5] : GameOver
 
       */
 
@@ -52,10 +56,9 @@ public class UIManager : UIManager_Base
         _childPanels[1].SetActive(_showSettings);
         _childPanels[2].SetActive(_showGameModes); 
         _childPanels[3].SetActive(_showDifficultyOptions);
-        _childPanels[4].SetActive(_showAdvancedPlayOptions);
 
-        _childPanels[5].SetActive(_showPauseScreen);
-        _childPanels[6].SetActive(_showGameOverScreen);
+        _childPanels[4].SetActive(_showPauseScreen);
+        _childPanels[5].SetActive(_showGameOverScreen);
     }
 
     public void ChangeBackground(bool switchToDark)
@@ -175,8 +178,6 @@ public class UIManager : UIManager_Base
 
     public void SpectatorPlayer()
     {
-        GameData.STATIC_SetBoardLength(10);
-        GameData.STATIC_GenerateBoard(true);
 
         GameData.STATIC_SetMinMaxDepth(2);
         GameData.STATIC_LoadMinMaxScript(true);

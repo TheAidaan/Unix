@@ -127,7 +127,6 @@ public class Brain : AI
             teamColor = GameData.minMaxColor == Color.red ? Color.blue : Color.red;
         }
         string color = teamColor == Color.red ? "red" : "blue";
-        Debug.Log("Neural Network is playing as the " + color + " team");
         GameData.STATIC_SetGeneticAIColor(teamColor);
     }
 
