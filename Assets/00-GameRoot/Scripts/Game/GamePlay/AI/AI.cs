@@ -34,8 +34,8 @@ public abstract class AI : MonoBehaviour
         
 
 
-        otherUnits = rand == 0 ? GameData.blueUnits : GameData.redUnits;
-        aiUnits = rand == 0 ? GameData.redUnits : GameData.blueUnits;
+        otherUnits = rand == 0 ? GameManager.gameData.GetBlueUnits() : GameManager.gameData.GetRedUnits();
+        aiUnits = rand == 0 ? GameManager.gameData.GetRedUnits() : GameManager.gameData.GetBlueUnits();
         teamColor = rand == 0 ? Color.red : Color.blue;
 
         if (!GameData.aiBattle)

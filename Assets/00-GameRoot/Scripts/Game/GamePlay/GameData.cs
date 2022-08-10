@@ -2,30 +2,52 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu]
-public class GameData : SingletonScriptableObject<GameData>
+public class GameData
 {
     
-    public static int boardLength { get { return _boardLength; } }
-
+    public GameData() { }
     //AI
 
     static bool _loadMinMaxScript, _loadMachineLearningScript, _generateBoard,_aiBattle;
     public static bool loadMinMaxScript { get { return _loadMinMaxScript; } }
 
-    static int _minMaxDepth, _boardLength;
-    public static int minMaxDepth { get { return _minMaxDepth; } }
+    int _minMaxDepth, _boardLength;
+
+    public int GetBoardLength()
+    {
+        return _boardLength;
+    } 
+    
+    public int GetMinMaxDepth()
+    {
+        return _minMaxDepth;
+    }
+
     public static bool loadMachineLearningScript { get { return _loadMachineLearningScript; } }
     public static bool generateBoard { get { return _generateBoard; } }
     public static bool aiBattle { get { return _aiBattle; } }
 
     //Units
 
-    static List<BaseUnit> _redUnits;
-    public static List<BaseUnit> redUnits { get { return _redUnits; } }
+    List<BaseUnit> _redUnits, _blueUnits;
 
-    static List<BaseUnit> _blueUnits;
-    public static List<BaseUnit> blueUnits { get { return _blueUnits; } }
+    public List<BaseUnit> GetRedUnits()
+    {
+        return _redUnits;
+    }
+    public List<BaseUnit> GetBlueUnits()
+    {
+        return _blueUnits;
+    }
+    public void SetBlueUnits(List<BaseUnit> units)
+    {
+        _blueUnits = units;
+    }
+    public void SetRedUnits(List<BaseUnit> units)
+    {
+
+        _redUnits = units;
+    }
 
     //Color
 
@@ -74,15 +96,7 @@ public class GameData : SingletonScriptableObject<GameData>
 
 
     //Lists
-    void SetBlueUnits(List<BaseUnit> units)
-    {
-        _blueUnits = units;
-    }
-    void SetRedUnits(List<BaseUnit> units)
-    {
-        
-        _redUnits = units;
-    }
+    
 
     //Colors
     void SetMinMaxColor(Color color)

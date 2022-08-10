@@ -20,13 +20,13 @@ public class Board : MonoBehaviour
     {
         GameObject[,] map = new GameObject[10,6];
 
-        allTiles = new Tile[GameData.boardLength, GameData.boardLength];
+        allTiles = new Tile[GameManager.gameData.GetBoardLength(), GameManager.gameData.GetBoardLength()];
 
         GameObject _tilePrefab = Resources.Load<GameObject>("Prefabs/Tile");
        
-        for (int x=0; x < GameData.boardLength; x++)
+        for (int x=0; x < GameManager.gameData.GetBoardLength(); x++)
         {
-            for (int y = 0; y < GameData.boardLength; y++)
+            for (int y = 0; y < GameManager.gameData.GetBoardLength(); y++)
             {
                 if (GameData.generateBoard)
                 {
@@ -57,9 +57,9 @@ public class Board : MonoBehaviour
             
         }
 
-        for (int x = 0; x < GameData.boardLength; x+=2)
+        for (int x = 0; x < GameManager.gameData.GetBoardLength(); x+=2)
         {
-            for (int y = 0; y < GameData.boardLength; y++)
+            for (int y = 0; y < GameManager.gameData.GetBoardLength(); y++)
             {
                 int offset = (y % 2 != 0) ? 0 : 1;
                 int finalX = x  + offset;
@@ -165,10 +165,10 @@ public class Board : MonoBehaviour
     public TileState ValidateTile(int targetX, int targetY, BaseUnit checkingUnit)
     {
         //is Target on the board (Bounds Check)
-        if (targetX < 0 || targetX >= GameData.boardLength)                                                           
+        if (targetX < 0 || targetX >= GameManager.gameData.GetBoardLength())                                                           
             return TileState.OutOfBounds;
 
-        if (targetY < 0 || targetY >= GameData.boardLength)
+        if (targetY < 0 || targetY >= GameManager.gameData.GetBoardLength())
             return TileState.OutOfBounds;
 
         Tile targetTile = allTiles[targetX, targetY]; // get the specific tile

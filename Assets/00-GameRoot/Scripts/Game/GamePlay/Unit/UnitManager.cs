@@ -34,13 +34,13 @@ public class UnitManager : MonoBehaviour
 
     public void Setup(Board board)
     {
-        GameData.STATIC_SetRedUnits( CreateUnits(Color.red, new Color32(210, 95, 64, 255), board));
+        GameData.STATIC_SetGameManager.gameData.GetRedUnits()( CreateUnits(Color.red, new Color32(210, 95, 64, 255), board));
 
         GameData.STATIC_SetBlueUnits(CreateUnits(Color.blue, new Color32(80, 124, 159, 255) , board));
 
 
-        PlaceUnits(1, 0, GameData.redUnits, board);
-        PlaceUnits(GameData.boardLength - 2, GameData.boardLength - 1, GameData.blueUnits, board);
+        PlaceUnits(1, 0, GameManager.gameData.GetRedUnits(), board);
+        PlaceUnits(GameManager.gameData.GetBoardLength() - 2, GameManager.gameData.GetBoardLength() - 1, GameManager.gameData.GetBlueUnits(), board);
 
 
         
@@ -64,8 +64,8 @@ public class UnitManager : MonoBehaviour
             }
 
 
-            SetInteractive(GameData.redUnits, false);
-            SetInteractive(GameData.blueUnits, false);
+            SetInteractive(GameManager.gameData.GetRedUnits(), false);
+            SetInteractive(GameManager.gameData.GetBlueUnits(), false);
             SwitchSides(Color.red);
         }
         else
@@ -149,17 +149,17 @@ public class UnitManager : MonoBehaviour
             bool isRedTurn = colortThatJustPlayed == Color.red ? true : false;
 
             //set the interactivity
-            SetInteractive(GameData.redUnits, !isRedTurn);
-            SetInteractive(GameData.blueUnits, isRedTurn);
+            SetInteractive(GameManager.gameData.GetRedUnits(), !isRedTurn);
+            SetInteractive(GameManager.gameData.GetBlueUnits(), isRedTurn);
 
             if (GameData.playerColor == colortThatJustPlayed) // the player just went and it is the ai's turn  {
             {
                 if (_minMax != null)
                 {
                     if (GameData.minMaxColor == Color.red)
-                        SetInteractive(GameData.redUnits, false);
+                        SetInteractive(GameManager.gameData.GetRedUnits(), false);
                     else
-                        SetInteractive(GameData.blueUnits, false);
+                        SetInteractive(GameManager.gameData.GetBlueUnits(), false);
 
 
                     GameManager.play += _minMax.Play;
@@ -168,9 +168,9 @@ public class UnitManager : MonoBehaviour
                 if (_brain != null)
                 {
                     if (GameData.geneticAIColor == Color.red)
-                        SetInteractive(GameData.redUnits, false);
+                        SetInteractive(GameManager.gameData.GetRedUnits(), false);
                     else
-                        SetInteractive(GameData.blueUnits, false);
+                        SetInteractive(GameManager.gameData.GetBlueUnits(), false);
 
                     GameManager.play += _brain.Play;
                 }

@@ -123,7 +123,7 @@ public class Brain : AI
         }
         else
         {
-            aiUnits = GameData.minMaxColor == Color.red ?  GameData.blueUnits : GameData.redUnits;
+            aiUnits = GameData.minMaxColor == Color.red ?  GameManager.gameData.GetBlueUnits() : GameManager.gameData.GetRedUnits();
             teamColor = GameData.minMaxColor == Color.red ? Color.blue : Color.red;
         }
         string color = teamColor == Color.red ? "red" : "blue";

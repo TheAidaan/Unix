@@ -55,7 +55,7 @@ public class UXManager : MonoBehaviour
         {
             _cameras[0].Priority = 0;
 
-            if(GameData.boardLength>8)
+            if(GameManager.gameData.GetBoardLength()>8)
                 _cameras[2].Priority = 1;
             else
                 _cameras[1].Priority = 1;
@@ -66,7 +66,7 @@ public class UXManager : MonoBehaviour
         else
         {
             _cameras[0].Priority = 1;
-            if (GameData.boardLength > 8)
+            if (GameManager.gameData.GetBoardLength() > 8)
                 _cameras[2].Priority = 0;
             else
                 _cameras[1].Priority = 0;

@@ -10,6 +10,10 @@ public class GameManager : MonoBehaviour
 
     UnitManager _unitManager;
 
+    static GameData _gameData;
+    static public GameData gameData { get { return _gameData; } }
+
+
     static int _blueTeamScore, _redTeamScore;
     public static int blueTeamScore { get { return _blueTeamScore; } }
     public static int redTeamScore { get { return _redTeamScore; } }

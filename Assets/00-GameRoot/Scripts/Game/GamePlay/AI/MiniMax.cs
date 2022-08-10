@@ -15,7 +15,7 @@ public class MiniMax : AI
         }
         else
         {
-            aiUnits = GameData.geneticAIColor == Color.red ? GameData.blueUnits : GameData.redUnits;
+            aiUnits = GameData.geneticAIColor == Color.red ? GameManager.gameData.GetBlueUnits() : GameManager.gameData.GetRedUnits();
             teamColor = GameData.geneticAIColor == Color.red ? Color.blue : Color.red;
         }
         GameData.STATIC_SetMinMaxColor(teamColor);
@@ -27,7 +27,7 @@ public class MiniMax : AI
 
         GameManager.STATIC_SetAIEvaluationStatus(true);
 
-        Algorithm(GameData.minMaxDepth,double.NegativeInfinity,double.PositiveInfinity, true, null);
+        Algorithm(GameManager.gameData.GetMinMaxDepth(),double.NegativeInfinity,double.PositiveInfinity, true, null);
 
         GameManager.STATIC_SetAIEvaluationStatus(false);
 
