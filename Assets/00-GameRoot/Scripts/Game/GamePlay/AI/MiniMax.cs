@@ -8,17 +8,17 @@ public class MiniMax : AI
     
     public override void AssignUnits()
     {
-        if (GameData.geneticAIColor == Color.white)
+        if (GameManager.gameData.GetGeneticAIColor() == Color.white)
         {
             base.AssignUnits();         
 
         }
         else
         {
-            aiUnits = GameData.geneticAIColor == Color.red ? GameManager.gameData.GetBlueUnits() : GameManager.gameData.GetRedUnits();
-            teamColor = GameData.geneticAIColor == Color.red ? Color.blue : Color.red;
+            aiUnits = GameManager.gameData.GetGeneticAIColor() == Color.red ? GameManager.gameData.GetBlueUnits() : GameManager.gameData.GetRedUnits();
+            teamColor = GameManager.gameData.GetGeneticAIColor() == Color.red ? Color.blue : Color.red;
         }
-        GameData.STATIC_SetMinMaxColor(teamColor);
+        GameManager.gameData.SetMinMaxColor(teamColor);
         string color = teamColor == Color.red ? "red" : "blue";
     }
 

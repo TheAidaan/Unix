@@ -15,29 +15,19 @@ public class UIManager : UIManager_Base
     [SerializeField]
     TextMeshProUGUI _txtTitle, _txtRedTeamScore, _txtBlueTeamScore, _txtWinner;
 
-
-    [SerializeField]
-    GameData data;
+    GameData _newGameData;
     private void Start()
     {
-        GameData.STATIC_SetBoardLength(8);
-        GameData.STATIC_LoadMinMaxScript(true);
-        GameData.STATIC_GenerateBoard(false);
-        GameData.STATIC_SetAIBattle(true);
-        GameData.STATIC_LoadMachineLearningScript(true);
-        GameData.STATIC_SetMinMaxColor(Color.white);
-        GameData.STATIC_SetGeneticAIColor(Color.white);
-        GameData.STATIC_SetPlayerColor(Color.white);
+        GameData SpectatorBattle = new GameData(8, false, true, true, true,2) ;
+
+        GameManager.STATIC_AssignGameData(SpectatorBattle);
+
         GameManager.Static_StartGame(false);
-
-        GameData.STATIC_SetMinMaxDepth(2);
-
-
 
         _txtRedTeamScore.transform.parent.gameObject.SetActive(false);
         _txtBlueTeamScore.transform.parent.gameObject.SetActive(false);
 
-       
+        _newGameData = new GameData();
     }
 
     public override void SetUI()
@@ -109,8 +99,8 @@ public class UIManager : UIManager_Base
     }
     public void LoadSinglePlayer(int depth)
     {
-        GameData.STATIC_SetMinMaxDepth(depth);
-        GameData.STATIC_LoadMinMaxScript(true);
+        _newGameData.SetMinMaxDepth(depth);
+        _newGameData.LoadMinMaxScript(true);
 
 
         StartGame();
@@ -119,20 +109,18 @@ public class UIManager : UIManager_Base
     public void ComplexBoard(bool loadComplexBoard)
     {
         if (loadComplexBoard)
-            GameData.STATIC_SetBoardLength(10);
+            _newGameData.SetBoardLength(10);
         else
-            GameData.STATIC_SetBoardLength(8);
+            _newGameData.SetBoardLength(8);
 
-        GameData.STATIC_GenerateBoard(loadComplexBoard);
+        _newGameData.ComplexBoard(loadComplexBoard);
+
 
     }
 
     public void AdvancedPlayer()
     {
-        GameData.STATIC_LoadMachineLearningScript(true);
-        GameData.STATIC_LoadMinMaxScript(false);
-
-
+        _newGameData.LoadMachineLearningScript(true);
 
         StartGame();
     }
@@ -179,12 +167,12 @@ public class UIManager : UIManager_Base
     public void SpectatorPlayer()
     {
 
-        GameData.STATIC_SetMinMaxDepth(2);
-        GameData.STATIC_LoadMinMaxScript(true);
+        _newGameData.SetMinMaxDepth(2);
+        _newGameData.LoadMinMaxScript(true);
 
-        GameData.STATIC_LoadMachineLearningScript(true);
+        _newGameData.LoadMachineLearningScript(true);
 
-        GameData.STATIC_SetAIBattle(true);
+        _newGameData.SetSpectatorBattle(true);
 
         StartGame();
     }

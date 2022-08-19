@@ -38,10 +38,10 @@ public abstract class AI : MonoBehaviour
         aiUnits = rand == 0 ? GameManager.gameData.GetRedUnits() : GameManager.gameData.GetBlueUnits();
         teamColor = rand == 0 ? Color.red : Color.blue;
 
-        if (!GameData.aiBattle)
+        if (!GameManager.gameData.SpectatorBattle())
         {
             Color playerColor = teamColor == Color.red ? Color.blue : Color.red;
-            GameData.STATIC_SetPlayerColor(playerColor);
+            GameManager.gameData.SetPlayerColor(playerColor);
         }
 
     }

@@ -36,7 +36,7 @@ public class UXManager : MonoBehaviour
             i++;
         }
 
-        if (GameData.generateBoard)
+        if (GameManager.gameData.ComplexBoard())
         {
             transform.position = new Vector3(88f, 87f, 94.9f);
         }

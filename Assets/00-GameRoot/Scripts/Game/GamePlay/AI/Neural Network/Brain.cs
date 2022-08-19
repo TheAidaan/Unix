@@ -117,17 +117,17 @@ public class Brain : AI
     public override void AssignUnits()
     {  
 
-        if (GameData.minMaxColor == Color.white)
+        if (GameManager.gameData.GetMinMaxColor() == Color.white)
         {
             base.AssignUnits();
         }
         else
         {
-            aiUnits = GameData.minMaxColor == Color.red ?  GameManager.gameData.GetBlueUnits() : GameManager.gameData.GetRedUnits();
-            teamColor = GameData.minMaxColor == Color.red ? Color.blue : Color.red;
+            aiUnits = GameManager.gameData.GetMinMaxColor() == Color.red ?  GameManager.gameData.GetBlueUnits() : GameManager.gameData.GetRedUnits();
+            teamColor = GameManager.gameData.GetMinMaxColor() == Color.red ? Color.blue : Color.red;
         }
         string color = teamColor == Color.red ? "red" : "blue";
-        GameData.STATIC_SetGeneticAIColor(teamColor);
+        GameManager.gameData.SetGeneticAIColor(teamColor);
     }
 
 

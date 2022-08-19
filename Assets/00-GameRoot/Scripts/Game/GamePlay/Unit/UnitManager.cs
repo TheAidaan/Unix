@@ -34,9 +34,9 @@ public class UnitManager : MonoBehaviour
 
     public void Setup(Board board)
     {
-        GameData.STATIC_SetGameManager.gameData.GetRedUnits()( CreateUnits(Color.red, new Color32(210, 95, 64, 255), board));
+        GameManager.STATIC_SetUnitsGameData( CreateUnits(Color.red, new Color32(210, 95, 64, 255), board), Color.red);
 
-        GameData.STATIC_SetBlueUnits(CreateUnits(Color.blue, new Color32(80, 124, 159, 255) , board));
+        GameManager.STATIC_SetUnitsGameData(CreateUnits(Color.blue, new Color32(80, 124, 159, 255),board), Color.blue);
 
 
         PlaceUnits(1, 0, GameManager.gameData.GetRedUnits(), board);
@@ -44,7 +44,7 @@ public class UnitManager : MonoBehaviour
 
 
         
-        if (GameData.aiBattle)
+        if (GameManager.gameData.SpectatorBattle())
         {
             int rand = UnityEngine.Random.Range(0, 2);
 
@@ -70,13 +70,13 @@ public class UnitManager : MonoBehaviour
         }
         else
         {
-            if (GameData.loadMinMaxScript)
+            if (GameManager.gameData.LoadMinMaxScript())
             {
                 _minMax = GetComponent<MiniMax>();
                 _minMax.AssignUnits();
             }
 
-            if (GameData.loadMachineLearningScript)
+            if (GameManager.gameData.LoadMachineLearningScript())
             {
                 _brain = GetComponent<Brain>();
                 _brain.AssignUnits();
@@ -118,7 +118,7 @@ public class UnitManager : MonoBehaviour
 
     void PlaceUnits(int secondRow,int firstRow,List<BaseUnit> units, Board board)
     {
-        int offset = GameData.generateBoard ? 2 : 1;
+        int offset = GameManager.gameData.ComplexBoard() ? 2 : 1;
 
         for (int i = 0; i < 6; i++)
         {
@@ -144,7 +144,7 @@ public class UnitManager : MonoBehaviour
     public void SwitchSides(Color colortThatJustPlayed)
     {
 
-        if (!GameData.aiBattle)
+        if (!GameManager.gameData.SpectatorBattle())
         {
             bool isRedTurn = colortThatJustPlayed == Color.red ? true : false;
 
@@ -152,11 +152,11 @@ public class UnitManager : MonoBehaviour
             SetInteractive(GameManager.gameData.GetRedUnits(), !isRedTurn);
             SetInteractive(GameManager.gameData.GetBlueUnits(), isRedTurn);
 
-            if (GameData.playerColor == colortThatJustPlayed) // the player just went and it is the ai's turn  {
+            if (GameManager.gameData.GetPlayerColor() == colortThatJustPlayed) // the player just went and it is the ai's turn  {
             {
                 if (_minMax != null)
                 {
-                    if (GameData.minMaxColor == Color.red)
+                    if (GameManager.gameData.GetMinMaxColor() == Color.red)
                         SetInteractive(GameManager.gameData.GetRedUnits(), false);
                     else
                         SetInteractive(GameManager.gameData.GetBlueUnits(), false);
@@ -167,7 +167,7 @@ public class UnitManager : MonoBehaviour
 
                 if (_brain != null)
                 {
-                    if (GameData.geneticAIColor == Color.red)
+                    if (GameManager.gameData.GetGeneticAIColor() == Color.red)
                         SetInteractive(GameManager.gameData.GetRedUnits(), false);
                     else
                         SetInteractive(GameManager.gameData.GetBlueUnits(), false);
@@ -181,13 +181,13 @@ public class UnitManager : MonoBehaviour
         {
             if (_brain != null)
             {
-                if (GameData.geneticAIColor != colortThatJustPlayed)
+                if (GameManager.gameData.GetGeneticAIColor() != colortThatJustPlayed)
                     GameManager.play += _brain.Play;
             }
 
             if (_minMax != null)
             {
-                if (GameData.minMaxColor != colortThatJustPlayed)
+                if (GameManager.gameData.GetMinMaxColor() != colortThatJustPlayed)
                     GameManager.play += _minMax.Play;
             }
         }

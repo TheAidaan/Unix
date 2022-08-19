@@ -28,7 +28,7 @@ public class Board : MonoBehaviour
         {
             for (int y = 0; y < GameManager.gameData.GetBoardLength(); y++)
             {
-                if (GameData.generateBoard)
+                if (GameManager.gameData.ComplexBoard())
                 {
                     if ((x == 0 && y == 0) || (x == 0 && y == 1) || (x == 9 && y == 1) || (x == 9 && y == 0))
                     {
@@ -50,7 +50,7 @@ public class Board : MonoBehaviour
                 string tileID = x.ToString() +","+ y.ToString();
                 allTiles[x, y].Setup(this, new Vector3Int(x,0,y),tileID);
 
-                if (GameData.generateBoard)
+                if (GameManager.gameData.ComplexBoard())
                     if (y != 0 && y != 1 && y != 8 && y != 9)
                         map[x, y - 2] = newTile;
             }
@@ -69,7 +69,7 @@ public class Board : MonoBehaviour
             }
         }
 
-        if (GameData.generateBoard)
+        if (GameManager.gameData.ComplexBoard())
             GenerateMap(map);
     }
 

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 public class GameManager : MonoBehaviour
 {
     static bool _activeGame;
@@ -100,6 +101,7 @@ public class GameManager : MonoBehaviour
     {
         StartCoroutine(WaitToPlay());
     } 
+
     void StartGame( bool activeGame)
     {
         _gameOver = true;
@@ -117,10 +119,10 @@ public class GameManager : MonoBehaviour
 
         updateUI?.Invoke();
 
-        if (GameData.loadMinMaxScript)
+        if (_gameData.LoadMinMaxScript())
             gameObject.AddComponent<MiniMax>();
 
-        if (GameData.loadMachineLearningScript)
+        if (_gameData.LoadMachineLearningScript())
             gameObject.AddComponent<Brain>();
 
         Board board = GetComponent<Board>();
@@ -145,7 +147,26 @@ public class GameManager : MonoBehaviour
 
     }
 
-    /*                  STATICS                  */
+    void AssignGameData(GameData data)
+    {
+        _gameOver = true;
+
+        endGame?.Invoke();
+
+        _gameData = data;
+
+    }
+    void SetUnitsGameData(List<BaseUnit> units, Color color)
+    {
+        if (color == Color.red)
+            _gameData.SetRedUnits(units);
+        else
+            _gameData.SetBlueUnits(units);
+
+    }
+
+    #region Statics
+
 
     public void SetAIEvaluationStatus(bool status)
     {
@@ -174,4 +195,15 @@ public class GameManager : MonoBehaviour
     {
         instance.StartGame(activeGame);
     }
+
+    public static void STATIC_AssignGameData(GameData data)
+    {
+        instance.AssignGameData(data);
+    } 
+    
+    public static void STATIC_SetUnitsGameData(List<BaseUnit> units, Color color)
+    {
+        instance.SetUnitsGameData(units, color) ;
+    }
+#endregion Statics
 }
