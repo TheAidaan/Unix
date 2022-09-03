@@ -103,7 +103,6 @@ public class GameManager : MonoBehaviour
 
     void StartGame( bool activeGame)
     {
-        _gameOver = true;
         if (activeGame)
         UXManager.Static_SwitchCameras();
         _activeGame = activeGame;
@@ -127,10 +126,8 @@ public class GameManager : MonoBehaviour
 
 
         SetAIEvaluationStatus(false);
-        _gameOver = false;
-
     }
-
+   
 
     public IEnumerator WaitToPlay()
     {
