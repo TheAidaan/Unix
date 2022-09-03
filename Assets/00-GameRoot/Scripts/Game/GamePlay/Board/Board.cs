@@ -136,6 +136,8 @@ public class Board : MonoBehaviour
         }
 
         return boolMapNew;
+
+        Debug.Log("board");
     }
 
     public int countActiveNeighbours(bool[,] map, int x, int y)

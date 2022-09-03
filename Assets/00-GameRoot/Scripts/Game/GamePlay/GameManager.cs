@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
 
     UnitManager _unitManager;
 
-    static GameData _gameData;
+    static GameData _gameData = new GameData();
     static public GameData gameData { get { return _gameData; } }
 
 
@@ -36,7 +36,6 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
-
     }
 
     private void Update()
@@ -113,23 +112,19 @@ public class GameManager : MonoBehaviour
         {
             DestroyImmediate(transform.GetChild(0).gameObject);
         }
+        Board board = GetComponent<Board>();
+        board.Create();
+        _unitManager = GetComponent<UnitManager>();
+
+        
+        _unitManager.Setup(board);
 
         _blueTeamScore = 0;
         _redTeamScore = 0;
 
-        updateUI?.Invoke();
+        updateUI?.Invoke();  
 
-        if (_gameData.LoadMinMaxScript())
-            gameObject.AddComponent<MiniMax>();
 
-        if (_gameData.LoadMachineLearningScript())
-            gameObject.AddComponent<Brain>();
-
-        Board board = GetComponent<Board>();
-        _unitManager = GetComponent<UnitManager>();
-
-        board.Create();
-        _unitManager.Setup(board);
 
         SetAIEvaluationStatus(false);
         _gameOver = false;
@@ -149,11 +144,24 @@ public class GameManager : MonoBehaviour
 
     void AssignGameData(GameData data)
     {
+        if (_gameData.LoadMinMaxScript())
+            Destroy(gameObject.GetComponent<MiniMax>());
+
+        if (_gameData.LoadMachineLearningScript())
+            Destroy(gameObject.GetComponent<Brain>());
+
         _gameOver = true;
 
         endGame?.Invoke();
 
+
+        if (data.LoadMinMaxScript())
+            gameObject.AddComponent<MiniMax>();
+
+        if (data.LoadMachineLearningScript())
+            gameObject.AddComponent<Brain>();
         _gameData = data;
+
 
     }
     void SetUnitsGameData(List<BaseUnit> units, Color color)

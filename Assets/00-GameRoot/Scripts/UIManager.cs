@@ -18,11 +18,11 @@ public class UIManager : UIManager_Base
     GameData _newGameData;
     private void Start()
     {
-        GameData SpectatorBattle = new GameData(8, false, true, true, true,2) ;
+        //GameData SpectatorBattle = new GameData(8, false, true, true, true,2) ;
 
-        GameManager.STATIC_AssignGameData(SpectatorBattle);
+        //GameManager.STATIC_AssignGameData(SpectatorBattle);
 
-        GameManager.Static_StartGame(false);
+        //GameManager.Static_StartGame(false);
 
         _txtRedTeamScore.transform.parent.gameObject.SetActive(false);
         _txtBlueTeamScore.transform.parent.gameObject.SetActive(false);
@@ -73,6 +73,7 @@ public class UIManager : UIManager_Base
 
     public void StartGame()
     {
+        GameManager.STATIC_AssignGameData(_newGameData);
 
         _txtRedTeamScore.transform.parent.gameObject.SetActive(true);
         _txtBlueTeamScore.transform.parent.gameObject.SetActive(true);
@@ -95,6 +96,7 @@ public class UIManager : UIManager_Base
     #region GameModes
     public void LoadMultiPlayer()
     {
+
         StartGame();
     }
     public void LoadSinglePlayer(int depth)
