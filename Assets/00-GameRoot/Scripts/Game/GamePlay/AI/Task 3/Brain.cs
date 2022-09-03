@@ -127,9 +127,12 @@ public class Brain : AI
             teamColor = GameManager.gameData.GetMinMaxColor() == Color.red ? Color.blue : Color.red;
         }
         string color = teamColor == Color.red ? "red" : "blue";
+<<<<<<< HEAD
 <<<<<<< HEAD:Assets/00-GameRoot/Scripts/Game/GamePlay/AI/Neural Network/Brain.cs
         GameManager.gameData.SetGeneticAIColor(teamColor);
 =======
+=======
+>>>>>>> parent of 0d0b44d (more design updates)
         Debug.Log("Neural Network is playing as the " + color + " team");
         GameData.STATIC_SetGeneticAIColor(teamColor);
 >>>>>>> parent of 0d0b44d (more design updates):Assets/00-GameRoot/Scripts/Game/GamePlay/AI/Task 3/Brain.cs

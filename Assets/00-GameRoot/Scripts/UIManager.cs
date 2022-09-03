@@ -34,6 +34,9 @@ public class UIManager : UIManager_Base
         GameData.STATIC_SetGeneticAIColor(Color.white);
         GameData.STATIC_SetPlayerColor(Color.white);
         GameManager.Static_StartGame(false);
+<<<<<<< HEAD
+>>>>>>> parent of 0d0b44d (more design updates)
+=======
 >>>>>>> parent of 0d0b44d (more design updates)
 
         _txtRedTeamScore.transform.parent.gameObject.SetActive(false);
