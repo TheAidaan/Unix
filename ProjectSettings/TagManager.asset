@@ -3,16 +3,15 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags:
-  - Interactive
+  tags: []
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - RedTeam
+  - 
   - Water
   - UI
-  - BlueTeam
+  - 
   - 
   - 
   - 
