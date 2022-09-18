@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using System;
 
 
 
@@ -21,6 +22,7 @@ public class UIManager : UIManager_Base
 
     IntroAnimationController _IntroAnimation;
 
+    public static event Action changeTextColor;
 
     private void Start()
     {
@@ -70,6 +72,9 @@ public class UIManager : UIManager_Base
             UXManager.Static_DarkMode();
         else
             UXManager.Static_LightMode();
+
+        changeTextColor?.Invoke();
+
 
     }
 

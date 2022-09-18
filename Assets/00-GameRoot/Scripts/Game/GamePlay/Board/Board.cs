@@ -101,8 +101,7 @@ public class Board : MonoBehaviour
 
                 if (!boolMap[x, y])
                 {
-                    map[x,y].GetComponent<Renderer>().material.color = new Color32(17, 17, 17, 255);
-                    Destroy(map[x, y].GetComponent<Tile>());
+                    Destroy(map[x, y]);
                 }
 
             }

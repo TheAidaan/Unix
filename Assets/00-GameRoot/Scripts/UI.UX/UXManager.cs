@@ -3,6 +3,7 @@ using Cinemachine;
 using UnityEngine.Audio;
 
 
+
 public class UXManager : MonoBehaviour
 {
     public static UXManager instance;
@@ -13,8 +14,12 @@ public class UXManager : MonoBehaviour
     //[SerializeField]
     static Camera _mainCamera;
     public static Camera mainCamera{ get { return _mainCamera; } }
+
     Color _dark = new Color(0.29f, 0.29f, 0.29f, 1);
     Color _light = new Color(1, 1, 1, 1);
+
+    static bool _inDarkMode;
+    public static bool inDarkMode { get { return _inDarkMode; } }
 
     AudioMixer _audio;
     static float _musicVolume, _soundMusic;
@@ -23,6 +28,8 @@ public class UXManager : MonoBehaviour
 
     [SerializeField]
     IntroAnimationController IntroAnimation;
+
+
     void Awake()
     {
         instance = this;
@@ -86,14 +93,19 @@ public class UXManager : MonoBehaviour
     void DarkMode()
     {
         _mainCamera.backgroundColor = _dark;
+        _inDarkMode = true;
+
+
     }
-    
+
     void LightMode()
     {
         _mainCamera.backgroundColor = _light;
+        _inDarkMode = false;
+
     }
 
-    /*       STATICS         */  
+    /*       STATICS         */
     public static void Static_SwitchCameras()
     {
         instance.SwitchCameras();
