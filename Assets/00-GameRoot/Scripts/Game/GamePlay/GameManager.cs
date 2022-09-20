@@ -100,13 +100,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(WaitToPlay());
     } 
     void StartGame()
-    {
-
-
-        while (transform.childCount > 0)
-        {
-            DestroyImmediate(transform.GetChild(0).gameObject);
-        }
+    {     
 
         _blueTeamScore = 0;
         _redTeamScore = 0;
@@ -126,6 +120,22 @@ public class GameManager : MonoBehaviour
         _unitManager.Setup(board);
 
         SetAIEvaluationStatus(false);
+    }
+
+    public void Restart()
+    {
+        while (transform.childCount > 0)
+        {
+            DestroyImmediate(transform.GetChild(0).gameObject);
+        }
+
+        GameData.STATIC_Restart();
+
+
+        _blueTeamScore = 0;
+        _redTeamScore = 0;
+
+        updateUI?.Invoke();
     }
    
 
@@ -174,6 +184,11 @@ public class GameManager : MonoBehaviour
     public static void Static_Play()
     {
         instance.Play();
+    }     
+    
+    public static void Static_RestartGame()
+    {
+        instance.Restart();
     } 
     public static void Static_StartGame()
     {

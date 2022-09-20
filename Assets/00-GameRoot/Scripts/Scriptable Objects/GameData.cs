@@ -34,6 +34,11 @@ public class GameData : SingletonScriptableObject<GameData>
     public static Color geneticAIColor { get { return _geneticAIColor; } }
     public static Color playerColor { get { return _playerColor; } }
 
+    void Restart()
+    {
+        _redUnits.Clear();
+        _blueUnits.Clear();
+    }
     void SetBoardLength(int Length)
     {
         _boardLength = Length;
@@ -147,7 +152,7 @@ public class GameData : SingletonScriptableObject<GameData>
         instance.LoadMachineLearningScript(load);
     }
 
-    //TASK 3
+    //COMPLEX BOARD
 
     public static void STATIC_GenerateBoard(bool generate)
     {
@@ -160,4 +165,12 @@ public class GameData : SingletonScriptableObject<GameData>
     }
 
     //DATA
+
+    //RESET
+
+    public static void STATIC_Restart()
+    {
+        instance.Restart();
+
+    }
 }

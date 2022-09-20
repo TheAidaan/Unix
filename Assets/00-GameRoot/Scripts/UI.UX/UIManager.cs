@@ -185,6 +185,28 @@ public class UIManager : UIManager_Base
         GameManager.Static_StartGame();
     }
 
+    public void RestartGame()
+    {
+        GameManager.Static_RestartGame();
+        _txtRedTeamScore.transform.parent.gameObject.SetActive(true);
+        _txtBlueTeamScore.transform.parent.gameObject.SetActive(true);
+        _txtTitle.gameObject.SetActive(false);
+
+
+        _showGameModes = false;
+        _showGameOverScreen = false;
+        _showPauseScreen = false;
+        _showDifficultyOptions = false;
+        _showAdvancedPlayOptions = false;
+
+        Time.timeScale = 1;
+
+        GameManager.STATIC_SetGameInProgress(true);
+
+        SetUI();
+        GameManager.Static_StartGame();
+    }
+
     #region GameModes
     public void LoadMultiPlayer()
     {
@@ -266,6 +288,7 @@ public class UIManager : UIManager_Base
 
     }
    
+  
     void UpdateScores()
     {
         _txtBlueTeamScore.text = GameManager.blueTeamScore.ToString();
