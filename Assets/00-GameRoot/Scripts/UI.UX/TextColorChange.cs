@@ -11,6 +11,8 @@ public class TextColorChange : MonoBehaviour
 
     bool _ColorChanged;
 
+
+
     // Start is called before the first frame update
     void Start()
     {

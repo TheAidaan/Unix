@@ -18,6 +18,9 @@ public class GameManager : MonoBehaviour
 
     static bool _aiEvaluationInProgress;
     public static bool aiEvaluationInProgress { get { return _aiEvaluationInProgress; } }
+    
+    static bool _gameInProgress;
+    public static bool gameInProgress { get { return _gameInProgress; } }
 
     static bool _gameOver;
     public static bool gameOver { get { return _gameOver; } }
@@ -25,6 +28,8 @@ public class GameManager : MonoBehaviour
     public static event Action updateUI;
     public static event Action play;
     public static event Action endGame;
+
+
 
 
     private void Awake()
@@ -133,13 +138,24 @@ public class GameManager : MonoBehaviour
             play = null;
 
     }
-
-    /*                  STATICS                  */
-
     public void SetAIEvaluationStatus(bool status)
     {
         _aiEvaluationInProgress = status;
     }
+
+    public void SetGameInProgress(bool status)
+    {
+        _gameInProgress = status;
+    }
+
+    /*                  STATICS                  */
+
+
+    public static void STATIC_SetGameInProgress(bool status)
+    {
+        instance.SetGameInProgress(status);
+    }
+
 
     public static void STATIC_SetAIEvaluationStatus(bool status)
     {

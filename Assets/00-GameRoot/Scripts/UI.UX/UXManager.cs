@@ -59,35 +59,32 @@ public class UXManager : MonoBehaviour
         _audio.GetFloat("SoundVolume", out _soundMusic);    //get the volume for sound
     }
 
-    void SwitchCameras()
+    void EndAnimation()
     {
-        if (_introCamerInView)
-        {
-            StartCoroutine(IntroAnimation.Deactivate());
+        StartCoroutine(IntroAnimation.Deactivate());
+    } 
+   
 
-            _cameras[0].Priority = 0;
-
-            if(GameData.boardLength>8)
-                _cameras[2].Priority = 1;
-            else
-                _cameras[1].Priority = 1;
-
-            _introCamerInView = false;
+    void SwitchToAside()
+    {
 
 
-        }
+        _cameras[0].Priority = 1;
+        if (GameData.boardLength > 8)
+            _cameras[2].Priority = 0;
         else
-        {
-            _cameras[0].Priority = 1;
-            if (GameData.boardLength > 8)
-                _cameras[2].Priority = 0;
-            else
-                _cameras[1].Priority = 0;
-            
+            _cameras[1].Priority = 0;
 
-            _introCamerInView = true;
-        }
+    }
 
+    void SwitchToGameView()
+    {
+        _cameras[0].Priority = 0;
+
+        if (GameData.boardLength > 8)
+            _cameras[2].Priority = 1;
+        else
+            _cameras[1].Priority = 1;
     }
 
     void DarkMode()
@@ -106,9 +103,15 @@ public class UXManager : MonoBehaviour
     }
 
     /*       STATICS         */
-    public static void Static_SwitchCameras()
+    public static void Static_EndAnimation()
     {
-        instance.SwitchCameras();
+        instance.EndAnimation();
+    }public static void Static_SwitchToAside()
+    {
+        instance.SwitchToAside();
+    }public static void Static_SwitchToGameView()
+    {
+        instance.SwitchToGameView();
     }
     
     public static void Static_DarkMode()

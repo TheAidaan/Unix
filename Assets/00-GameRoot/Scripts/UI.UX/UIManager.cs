@@ -16,17 +16,16 @@ public class UIManager : UIManager_Base
     [SerializeField]
     TextMeshProUGUI _txtTitle, _txtRedTeamScore, _txtBlueTeamScore, _txtWinner;
 
+    bool _centeredTitle;
 
     [SerializeField]
     GameData data;
-
-    IntroAnimationController _IntroAnimation;
 
     public static event Action changeTextColor;
 
     private void Start()
     {
-        //StartIntroAnimtaion();
+
 
 
         GameData.STATIC_SetBoardLength(8);
@@ -37,6 +36,8 @@ public class UIManager : UIManager_Base
         GameData.STATIC_SetMinMaxColor(Color.white);
         GameData.STATIC_SetGeneticAIColor(Color.white);
         GameData.STATIC_SetPlayerColor(Color.white);
+        GameManager.STATIC_SetGameInProgress(false);
+
         _txtRedTeamScore.transform.parent.gameObject.SetActive(false);
         _txtBlueTeamScore.transform.parent.gameObject.SetActive(false);
 
@@ -81,25 +82,40 @@ public class UIManager : UIManager_Base
     public void Leave()  
     {
 
-        _showTitleScreen = true;
+        if (GameManager.gameInProgress)
+        {
+            _showPauseScreen = true;
+            UXManager.Static_SwitchToGameView();
+            if (!_centeredTitle)
+            {
+                _txtTitle.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector3(-0f, -100f, 0f);
+                _centeredTitle = true;
+
+            }
+        }
+        else
+        {
+            _showTitleScreen = true;
+            if (_centeredTitle)
+            {
+                _txtTitle.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector3(-235f, -100f, 0f);
+                _centeredTitle = true;
+
+            }
+
+        }
+
         _showSettings = false;
         _showGameModes = false;
         _showDifficultyOptions = false;
         _showAdvancedPlayOptions = false;
+
         SetUI();
     }           //to do
 
     #region pre-Game
 
-    void StartIntroAnimtaion()
-    {
-        GameObject simulation = Resources.Load<GameObject>("Prefabs/IntroAnimation");
-        Instantiate(simulation, new Vector3(120, 0, 60), Quaternion.Euler(new Vector3(0, 90, 0)));
-
-        _IntroAnimation = simulation.GetComponent<IntroAnimationController>();
-
-    }
-
+  
     public void ShowSettingsMenu()
     {
         _showSettings = true;
@@ -108,6 +124,17 @@ public class UIManager : UIManager_Base
 
         if (_showPauseScreen)
             _showPauseScreen = false;
+
+        if (_centeredTitle)
+        {
+            _txtTitle.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector3(-235f, -100f, 0f);
+            _centeredTitle = false;
+
+            _txtRedTeamScore.transform.parent.gameObject.SetActive(false);
+            _txtBlueTeamScore.transform.parent.gameObject.SetActive(false);
+        }
+
+        UXManager.Static_SwitchToAside();
 
         SetUI();
     }       //done
@@ -135,8 +162,11 @@ public class UIManager : UIManager_Base
 
     public IEnumerator StartGame()
     {
-        UXManager.Static_SwitchCameras();
-        yield return new WaitForSeconds(0.3f);
+        
+        UXManager.Static_EndAnimation();
+        UXManager.Static_SwitchToGameView();
+
+        yield return new WaitForSeconds(0.7f);
 
         _txtRedTeamScore.transform.parent.gameObject.SetActive(true);
         _txtBlueTeamScore.transform.parent.gameObject.SetActive(true);
@@ -149,6 +179,7 @@ public class UIManager : UIManager_Base
         _showDifficultyOptions = false;
         _showAdvancedPlayOptions = false;
 
+        GameManager.STATIC_SetGameInProgress(true);
 
         SetUI();
         GameManager.Static_StartGame();
@@ -203,15 +234,34 @@ public class UIManager : UIManager_Base
     }
     public void Pause()
     {
+        _txtTitle.gameObject.SetActive(true);
+        
         _showSettings = false;
         _showPauseScreen = true;
         Time.timeScale = 0;
+
+        if (!_centeredTitle)
+        {
+            _txtTitle.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector3(-0f, -100f, 0f);
+            _centeredTitle = true;
+            _txtRedTeamScore.transform.parent.gameObject.SetActive(true);
+            _txtBlueTeamScore.transform.parent.gameObject.SetActive(true);
+
+        }
+
+        UXManager.Static_SwitchToGameView();
+
         SetUI();
     }
     public void Play()
     {
+        _centeredTitle = true;
+        _txtTitle.rectTransform.position = new Vector3(0f, -100f, 0f);
+
         _showPauseScreen = false;
         Time.timeScale = 1;
+
+
         SetUI();
 
     }
