@@ -38,7 +38,7 @@ public abstract class BaseUnit : MonoBehaviour
     #region Unit Movement
     //Movement Variables
     public Vector3Int movement = Vector3Int.one;
-    public List<Tile> highlightedTiles = new List<Tile>();
+    public List<Tile> moveableTiles = new List<Tile>();
     public Tile currentTile = null;
     Tile previousTile = null;
 
@@ -61,14 +61,14 @@ public abstract class BaseUnit : MonoBehaviour
             if (tileState != TileState.Free) //if the tile is out of bounds or has a friendly on it, then break the look and don't add anything to the available target tiles.
                 break;
 
-            highlightedTiles.Add(currentTile.board.allTiles[currentX, currentY]); //add the tile if it is free
+            moveableTiles.Add(currentTile.board.allTiles[currentX, currentY]); //add the tile if it is free
 
         }
     }
 
     public virtual void CheckPath()
     {
-        highlightedTiles.Clear();
+        moveableTiles.Clear();
 
         //horizantal 
         CreateTilePath(1, 0, movement.x);
@@ -89,19 +89,19 @@ public abstract class BaseUnit : MonoBehaviour
 
     public void ShowHighlightedTiles()
     {
-        foreach (Tile tile in highlightedTiles)
-            tile.gameObject.GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
+        foreach (Tile tile in moveableTiles)
+            tile.Focus();
 
             
     }
 
     public void HideHighlightedTiles()
     {
-        foreach (Tile tile in highlightedTiles)
-            tile.gameObject.GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
+        foreach (Tile tile in moveableTiles)
+            tile.RemoveFocus();
 
 
-        highlightedTiles.Clear();
+        moveableTiles.Clear();
     }
     public void Place(Tile newTile)
     {
@@ -181,7 +181,7 @@ public abstract class BaseUnit : MonoBehaviour
         {
             transform.position = new Vector3(hit.point.x, transform.position.y, hit.point.z);// follow the ray(the cursor)
 
-            foreach (Tile tile in highlightedTiles)
+            foreach (Tile tile in moveableTiles)
             {
                 if (hit.transform.gameObject.GetComponent<Tile>() == tile) // is the cursor over one of he highlighted tiles?
                 {

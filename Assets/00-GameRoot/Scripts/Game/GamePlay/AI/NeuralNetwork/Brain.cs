@@ -181,10 +181,10 @@ public class Brain : AI
         else
         {
             unit.CheckPath();
-            if (unit.highlightedTiles.Count == 0)
+            if (unit.moveableTiles.Count == 0)
                 RandomMover();
             else
-                unit.Move(unit.highlightedTiles[UnityEngine.Random.Range(0, unit.highlightedTiles.Count)]);
+                unit.Move(unit.moveableTiles[UnityEngine.Random.Range(0, unit.moveableTiles.Count)]);
         }
 
     }

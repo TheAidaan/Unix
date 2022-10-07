@@ -32,13 +32,13 @@ public class WizardUnit : BaseUnit
         tileState = currentTile.board.ValidateTile(targetX, targetY, this);
         
         if (tileState != TileState.Taken && tileState != TileState.OutOfBounds)
-            highlightedTiles.Add(currentTile.board.allTiles[targetX, targetY]);
+            moveableTiles.Add(currentTile.board.allTiles[targetX, targetY]);
 
     }
 
     public override void CheckPath()
     {
-        highlightedTiles.Clear();
+        moveableTiles.Clear();
 
         CreateTilePath(1); // top half
         CreateTilePath(-1);//bottom half

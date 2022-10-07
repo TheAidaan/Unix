@@ -153,10 +153,10 @@ public class Network
 
         unit.CheckPath();
 
-        if (unit.highlightedTiles.Count == 0)
+        if (unit.moveableTiles.Count == 0)
             return null;
 
-        return unit.highlightedTiles;
+        return unit.moveableTiles;
     }
 
     protected double Evaluate(BaseUnit unit)
