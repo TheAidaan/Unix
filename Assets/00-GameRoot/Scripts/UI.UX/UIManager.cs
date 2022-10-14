@@ -20,7 +20,9 @@ public class UIManager : UIManager_Base
 
     [SerializeField]
     GameData data;
-
+    [SerializeField]
+    List<GameObject> HideOnPlay;
+        
     public static event Action changeTextColor;
 
     private void Start()
@@ -183,6 +185,11 @@ public class UIManager : UIManager_Base
 
         SetUI();
         GameManager.Static_StartGame();
+
+       foreach (GameObject obj in HideOnPlay)
+        {
+            obj.SetActive(false);
+        }
     }
 
     public void RestartGame()
@@ -310,6 +317,10 @@ public class UIManager : UIManager_Base
         _txtWinner.color = vertexColor;
 
         GameManager.endGame -= EndGame;
+        foreach(GameObject obj in HideOnPlay)
+        {
+            gameObject.SetActive(true);
+        }
     }
     #endregion
 
