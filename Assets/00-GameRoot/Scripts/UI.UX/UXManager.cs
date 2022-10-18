@@ -106,10 +106,12 @@ public class UXManager : MonoBehaviour
     public static void Static_EndAnimation()
     {
         instance.EndAnimation();
-    }public static void Static_SwitchToAside()
+    }
+    public static void Static_SwitchToAside()
     {
         instance.SwitchToAside();
-    }public static void Static_SwitchToGameView()
+    }
+    public static void Static_SwitchToGameView()
     {
         instance.SwitchToGameView();
     }

@@ -21,6 +21,9 @@ public class GameManager : MonoBehaviour
     
     static bool _gameInProgress;
     public static bool gameInProgress { get { return _gameInProgress; } }
+    
+    static bool _unitSelected;
+    public static bool unitSelected { get { return _unitSelected; } }
 
     static bool _gameOver;
     public static bool gameOver { get { return _gameOver; } }
@@ -40,7 +43,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !_unitSelected)
         {
             RaycastHit hit;
             Ray ray = UXManager.mainCamera.ScreenPointToRay(Input.mousePosition);
@@ -156,6 +159,11 @@ public class GameManager : MonoBehaviour
     public void SetGameInProgress(bool status)
     {
         _gameInProgress = status;
+    } 
+    
+    public void SetUnitSelected(bool status)
+    {
+        _unitSelected = status;
     }
 
     /*                  STATICS                  */
@@ -166,6 +174,11 @@ public class GameManager : MonoBehaviour
         instance.SetGameInProgress(status);
     }
 
+
+    public static void STATIC_SetUnitSelected(bool status)
+    {
+        instance.SetUnitSelected(status);
+    }
 
     public static void STATIC_SetAIEvaluationStatus(bool status)
     {

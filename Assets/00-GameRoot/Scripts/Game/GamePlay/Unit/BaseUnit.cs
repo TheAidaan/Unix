@@ -12,10 +12,9 @@ public abstract class BaseUnit : MonoBehaviour
 
     #region Unit setup
     public Color teamColor = Color.clear;
-
-
     public Vector3 rotation;
 
+    AudioSource _audioSource;
 
     public virtual void Setup(Color TeamColor, Color32 unitColor, string CharacterID)
     {
@@ -29,6 +28,8 @@ public abstract class BaseUnit : MonoBehaviour
         _health = maxHealth;
 
         rotation = transform.rotation.eulerAngles;
+
+        _audioSource = GetComponent<AudioSource>();
 
     }
 
@@ -113,6 +114,7 @@ public abstract class BaseUnit : MonoBehaviour
         //object
         transform.position = newTile.transform.position;
         gameObject.SetActive(true);
+        GameManager.STATIC_SetUnitSelected(false);
     }
 
 
@@ -145,7 +147,7 @@ public abstract class BaseUnit : MonoBehaviour
     #region Mouse events
     public void OnMouseOver()
     {
-        if (!GameManager.aiEvaluationInProgress)
+        if (!GameManager.aiEvaluationInProgress && !GameManager.unitSelected)
         {
             if (gameObject.CompareTag("Interactive"))
             {
@@ -172,6 +174,8 @@ public abstract class BaseUnit : MonoBehaviour
     public void Clicked()
     {
         TransitionToState(hoverState);
+        GameManager.STATIC_SetUnitSelected(true);
+
     }
 
     public void Drag()
@@ -188,6 +192,8 @@ public abstract class BaseUnit : MonoBehaviour
                     if (Input.GetMouseButtonDown(0))  // right button clicked
                     {
                         Move(tile);//move to the tile the player has chosen 
+                        GameManager.STATIC_SetUnitSelected(false);
+                        _audioSource.Play();
                         break;// only one can be the target 
                     }
                     
@@ -198,7 +204,11 @@ public abstract class BaseUnit : MonoBehaviour
 
             if (Input.GetMouseButtonDown(1)) // right button clicked
             {
+                GameManager.STATIC_SetUnitSelected(false);
+
                 TransitionToState(idleState);
+                
+
             }
         }
     }
