@@ -20,7 +20,7 @@ public class IntroAnimationController : MonoBehaviour
     public IEnumerator Deactivate()
     {
         anim.SetBool("ActiveSimulation", false);
-        yield return new WaitForSeconds(1.7f);
+        yield return new WaitForSeconds(0.6f);
         gameObject.SetActive(false);
     }
   

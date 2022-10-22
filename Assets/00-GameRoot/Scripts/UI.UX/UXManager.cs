@@ -133,7 +133,7 @@ public class UXManager : MonoBehaviour
 
     float ConvertToLog(float value)
     {
-        return Mathf.Log10(value) * 20;
+        return Mathf.Log10(value) * 20; 
     }
 
     public static void Static_SetSoundVolume(float value)

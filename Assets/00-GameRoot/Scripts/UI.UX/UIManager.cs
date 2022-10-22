@@ -28,7 +28,7 @@ public class UIManager : UIManager_Base
     private void Start()
     {
 
-
+        Time.timeScale = 1;
 
         GameData.STATIC_SetBoardLength(8);
         GameData.STATIC_LoadMinMaxScript(false);
@@ -49,10 +49,12 @@ public class UIManager : UIManager_Base
     public override void SetUI()
     { /*
         _childPanels[0] : Title
+
         _childPanels[1] : Settings
+
         _childPanels[2] : Game Modes
-        _childPanels[3] : Difficulty [scrap]
-        _childPanels[4] : AdvancedOptions [scrap]
+        _childPanels[3] : Difficulty 
+
         _childPanels[5] : Pause
         _childPanels[6] : GameOver
 
@@ -61,12 +63,13 @@ public class UIManager : UIManager_Base
         _childPanels[0].SetActive(_showTitleScreen);
 
         _childPanels[1].SetActive(_showSettings);
+
         _childPanels[2].SetActive(_showGameModes); 
         _childPanels[3].SetActive(_showDifficultyOptions);
-        _childPanels[4].SetActive(_showAdvancedPlayOptions);
 
-        _childPanels[5].SetActive(_showPauseScreen);
-        _childPanels[6].SetActive(_showGameOverScreen);
+        _childPanels[4].SetActive(_showPauseScreen);
+        _childPanels[5].SetActive(_showGameOverScreen);
+
     }
 
     public void ChangeBackground(bool switchToDark)
@@ -113,7 +116,7 @@ public class UIManager : UIManager_Base
         _showAdvancedPlayOptions = false;
 
         SetUI();
-    }           //to do
+    }           
 
     #region pre-Game
 
@@ -164,11 +167,13 @@ public class UIManager : UIManager_Base
 
     public IEnumerator StartGame()
     {
-        
+
         UXManager.Static_EndAnimation();
         UXManager.Static_SwitchToGameView();
 
-        yield return new WaitForSeconds(0.7f);
+        
+        yield return new WaitForSeconds(0.6f);
+        
 
         _txtRedTeamScore.transform.parent.gameObject.SetActive(true);
         _txtBlueTeamScore.transform.parent.gameObject.SetActive(true);
