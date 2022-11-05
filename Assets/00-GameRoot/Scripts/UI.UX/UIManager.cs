@@ -50,6 +50,7 @@ public class UIManager : UIManager_Base
         GameData.STATIC_SetGeneticAIColor(Color.white);
         GameData.STATIC_SetPlayerColor(Color.white);
         GameManager.STATIC_SetGameInProgress(false);
+        _centeredTitle = false;
 
         _txtRedTeamScore.transform.parent.gameObject.SetActive(false);
         _txtBlueTeamScore.transform.parent.gameObject.SetActive(false);
@@ -242,9 +243,10 @@ public class UIManager : UIManager_Base
         _showGameOverScreen = false;
         _showPauseScreen = false;
         _showDifficultyOptions = false;
+        _gamePaused = false;
 
         Time.timeScale = 1;
-
+        
         GameManager.STATIC_SetGameInProgress(true);
 
         _audioSource.Play();
@@ -333,10 +335,17 @@ public class UIManager : UIManager_Base
     public void Play()
     {
         _gamePaused = false;
+       
+
+        _txtTitle.gameObject.SetActive(false);
+
+        if (_showSettings)
+        { 
+            _showSettings = false;
+            UXManager.Static_SwitchToGameView();
+        }
 
         _audioSource.Play();
-        _centeredTitle = true;
-        _txtTitle.rectTransform.position = new Vector3(0f, -100f, 0f);
 
         _showPauseScreen = false;
         Time.timeScale = 1;
