@@ -149,7 +149,7 @@ public abstract class BaseUnit : MonoBehaviour
     #region Mouse events
     public void OnMouseOver()
     {
-        if (!GameManager.aiEvaluationInProgress && !GameManager.unitSelected)
+        if (!GameManager.aiEvaluationInProgress && !GameManager.unitSelected && !UIManager.gamePaused)
         {
             if (gameObject.CompareTag("Interactive"))
             {
@@ -267,7 +267,7 @@ public abstract class BaseUnit : MonoBehaviour
             {
                 brain.IncreaseTileWeightSimple(characterID[1],target.characterID[1]);// this was a good placement of the unit because it can attack another. It's not going to loose its brain because the attack must be proven to be successful/unsucessful
             }
-            if (target.isActiveAndEnabled)
+            if (target != null)
                 StartCoroutine(target.TakeDamage(damage,characterID[1]));             //attack 
         }
         else
@@ -315,7 +315,6 @@ public abstract class BaseUnit : MonoBehaviour
                     Die();
 
                 }
-
         }
 
         yield return new WaitForSeconds(.5f);

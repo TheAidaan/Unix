@@ -142,7 +142,7 @@ public class Brain : AI
 
         _lastMove = move;
 
-        Debug.Log("playing");
+
         base.Play();
 
     }

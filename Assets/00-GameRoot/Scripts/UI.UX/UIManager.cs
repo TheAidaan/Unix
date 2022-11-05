@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 using System;
@@ -14,6 +15,9 @@ public class UIManager : UIManager_Base
     bool _showTitleScreen = true;
     bool _showSettings, _showGameModes, _showDifficultyOptions; //pregame
     bool _showPauseScreen, _showGameOverScreen; //ingame
+
+    static bool _gamePaused;
+    public static bool gamePaused { get { return _gamePaused; } }
 
     [SerializeField]
     TextMeshProUGUI _txtTitle, _txtRedTeamScore, _txtBlueTeamScore, _txtWinner, _txtInfo;
@@ -197,7 +201,7 @@ public class UIManager : UIManager_Base
    
     public IEnumerator StartGame()
     {
-
+        _gamePaused = false;
         UXManager.Static_EndAnimation();
         UXManager.Static_SwitchToGameView();
 
@@ -299,10 +303,14 @@ public class UIManager : UIManager_Base
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
-            Pause();
+            if (gamePaused)
+                Play();
+            else
+                Pause();
     }
     public void Pause()
     {
+        _gamePaused = true;
         _txtTitle.gameObject.SetActive(true);
         
         _showSettings = false;
@@ -324,6 +332,8 @@ public class UIManager : UIManager_Base
     }
     public void Play()
     {
+        _gamePaused = false;
+
         _audioSource.Play();
         _centeredTitle = true;
         _txtTitle.rectTransform.position = new Vector3(0f, -100f, 0f);
@@ -361,6 +371,12 @@ public class UIManager : UIManager_Base
         {
             gameObject.SetActive(true);
         }
+    }
+    #endregion
+    #region General
+    public void DisableButton(Button button)
+    {
+        button.interactable = false;
     }
     #endregion
 

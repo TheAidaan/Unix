@@ -108,12 +108,12 @@ public class WizardUnit : BaseUnit
     }
 
     public override void Die() {
-        if (_targets.Count != 0)
+        if (_targets.Count != 0 && gameObject != null)
         {
             foreach (BaseUnit target in _targets)
             {
-                if (target.isActiveAndEnabled)
-                target.GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
+                if (target != null)
+                 target.GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
 
             }
         }

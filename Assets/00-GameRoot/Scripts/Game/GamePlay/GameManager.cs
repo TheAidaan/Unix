@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0) && !_unitSelected)
+        if (Input.GetMouseButtonDown(0) && !_unitSelected && !UIManager.gamePaused)
         {
             RaycastHit hit;
             Ray ray = UXManager.mainCamera.ScreenPointToRay(Input.mousePosition);
