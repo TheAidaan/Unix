@@ -231,6 +231,7 @@ public abstract class BaseUnit : MonoBehaviour
 
     void Start()
     {
+        attackCount = 0;
         TransitionToState(idleState);
     }
     private void Update()
@@ -251,12 +252,22 @@ public abstract class BaseUnit : MonoBehaviour
     public BaseUnit target;
     public Vector3 targetPos;
     public float coolDown;
+    public int attackLimit, attackCount;
 
     Renderer _rend;
-    public virtual void IdleUpdate() { CheckForEnemy(); }
+    public virtual void IdleUpdate() { CheckForEnemy(); attackCount = 0; }
     public virtual BaseUnit CheckForEnemy() { return null; }
     public virtual List<BaseUnit> CheckForEnemies(bool checkForReturn) { return null; }
 
+    public void CountAttacks()
+    {
+        if (attackCount < attackLimit)
+        {
+            Attack();
+            attackCount++;
+        }
+
+    }
     public virtual void Attack() 
     {
         bool canAttack = CheckAttackValidity();

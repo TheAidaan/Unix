@@ -28,7 +28,7 @@ public class UnitAttackState : UnitBaseState
         if (timePassed > script.coolDown)
         {
             if (script != null)
-                script.Attack();
+                script.CountAttacks();
             timePassed = 0;
         }
         
