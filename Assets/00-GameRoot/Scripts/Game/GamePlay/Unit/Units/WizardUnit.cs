@@ -2,7 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class WizardUnit : BaseUnit
-{ 
+{
+    List<BaseUnit> _targets;
     public override void Setup(Color TeamColor, Color32 unitColor, string characterID)
     {
         maxHealth = 15;
@@ -76,9 +77,9 @@ public class WizardUnit : BaseUnit
     public override void Attack()
     {
         List<char> targetChar = new List<char>();
-        List<BaseUnit> targets = CheckForEnemies(true);
+        _targets = CheckForEnemies(true);
 
-        if (targets.Count == 0)
+        if (_targets.Count == 0)
         {
             if (brain != null)
             {
@@ -89,17 +90,36 @@ public class WizardUnit : BaseUnit
             TransitionToState(idleState);
         }
 
-        foreach (BaseUnit target in targets)
+        foreach (BaseUnit target in _targets)
         {
-            StartCoroutine(target.TakeDamage(4, characterID[1])); //attack       
-            targetChar.Add(target.characterID[1]);
+            if (target.isActiveAndEnabled)
+            {
+                StartCoroutine(target.TakeDamage(4, characterID[1])); //attack       
+                targetChar.Add(target.characterID[1]);
+            }
+            
         }
         if (brain!=null)
         {
             brain.IncreaseTileWeightWizard(targetChar);
         }
-        targets.Clear();
+        _targets.Clear();
 
+    }
+
+    public override void Die() {
+        if (_targets.Count != 0)
+        {
+            foreach (BaseUnit target in _targets)
+            {
+                if (target.isActiveAndEnabled)
+                target.GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
+
+            }
+        }
+
+
+        gameObject.SetActive(false);
     }
     #endregion
 

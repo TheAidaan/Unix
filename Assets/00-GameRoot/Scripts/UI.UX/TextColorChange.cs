@@ -29,4 +29,9 @@ public class TextColorChange : MonoBehaviour
             _text.color = _dark;
 
     }
+
+    //private void OnEnable()
+    //{
+    //    ChangeColor();
+    //}
 }

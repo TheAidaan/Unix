@@ -66,7 +66,6 @@ public class UnitManager : MonoBehaviour
 
             SetInteractive(GameData.redUnits, false);
             SetInteractive(GameData.blueUnits, false);
-            SwitchSides(Color.red);
         }
         else
         {
@@ -83,8 +82,10 @@ public class UnitManager : MonoBehaviour
 
             }
 
-            SwitchSides(Color.red);
+
         }
+        SwitchSides(Color.red);
+
     }
 
     List<BaseUnit> CreateUnits(Color teamColor, Color32 unitColor,Board board)
@@ -144,13 +145,16 @@ public class UnitManager : MonoBehaviour
     public void SwitchSides(Color colortThatJustPlayed)
     {
 
-        if (!GameData.aiBattle)
-        {
-            bool isRedTurn = colortThatJustPlayed == Color.red ? true : false;
+
+
+            bool isRedTurn = colortThatJustPlayed == Color.red ? false : true;
+
 
             //set the interactivity
-            SetInteractive(GameData.redUnits, !isRedTurn);
-            SetInteractive(GameData.blueUnits, isRedTurn);
+            SetInteractive(GameData.redUnits, isRedTurn);
+            SetInteractive(GameData.blueUnits, !isRedTurn);
+
+        if (GameData.playerColor == Color.red)
 
             if (GameData.playerColor == colortThatJustPlayed) // the player just went and it is the ai's turn  {
             {
@@ -167,30 +171,26 @@ public class UnitManager : MonoBehaviour
 
                 if (_brain != null)
                 {
+                
                     if (GameData.geneticAIColor == Color.red)
+                    {
                         SetInteractive(GameData.redUnits, false);
-                    else
-                        SetInteractive(GameData.blueUnits, false);
-
-                    GameManager.play += _brain.Play;
                 }
+                    else
+                    {
 
-            }
-        }
-        else
-        {
-            if (_brain != null)
-            {
-                if (GameData.geneticAIColor != colortThatJustPlayed)
+                    SetInteractive(GameData.blueUnits, false);
+
+                    }
+
                     GameManager.play += _brain.Play;
-            }
 
-            if (_minMax != null)
-            {
-                if (GameData.minMaxColor != colortThatJustPlayed)
-                    GameManager.play += _minMax.Play;
             }
-        }
+            
+
+            }
+        
+       
 
         GameManager.Static_Play();
            

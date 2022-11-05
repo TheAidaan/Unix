@@ -20,6 +20,8 @@ public class MiniMax : AI
         }
         GameData.STATIC_SetMinMaxColor(teamColor);
         string color = teamColor == Color.red ? "red" : "blue";
+        UIManager.DisplayPlayerTeam();
+
     }
 
     public override void Play()

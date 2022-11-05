@@ -6,7 +6,7 @@ public abstract class BaseUnit : MonoBehaviour
 {
     public Brain brain;
     public int maxHealth;
-    int _health;
+    public int _health;
     public string characterID;
     public int damage;
 
@@ -31,6 +31,7 @@ public abstract class BaseUnit : MonoBehaviour
 
         _audioSource = GetComponent<AudioSource>();
 
+        _rend = gameObject.GetComponent<Renderer>();
     }
 
   
@@ -137,6 +138,7 @@ public abstract class BaseUnit : MonoBehaviour
         {
             TransitionToState(idleState);
             GameManager.Static_SwitchSides(teamColor, characterID, targetTile.tileID);
+            _audioSource.Play();
         }
 
         targetTile = null;
@@ -233,7 +235,8 @@ public abstract class BaseUnit : MonoBehaviour
     }
     private void Update()
     {
-        currentState.Update(this);
+        if(gameObject!=null) //just in case it was destroyed between frames
+         currentState.Update(this);
     }
     public void TransitionToState(UnitBaseState state)
     {
@@ -249,6 +252,7 @@ public abstract class BaseUnit : MonoBehaviour
     public Vector3 targetPos;
     public float coolDown;
 
+    Renderer _rend;
     public virtual void IdleUpdate() { CheckForEnemy(); }
     public virtual BaseUnit CheckForEnemy() { return null; }
     public virtual List<BaseUnit> CheckForEnemies(bool checkForReturn) { return null; }
@@ -263,6 +267,7 @@ public abstract class BaseUnit : MonoBehaviour
             {
                 brain.IncreaseTileWeightSimple(characterID[1],target.characterID[1]);// this was a good placement of the unit because it can attack another. It's not going to loose its brain because the attack must be proven to be successful/unsucessful
             }
+            if (target.isActiveAndEnabled)
                 StartCoroutine(target.TakeDamage(damage,characterID[1]));             //attack 
         }
         else
@@ -285,25 +290,44 @@ public abstract class BaseUnit : MonoBehaviour
         return false;
     }
 
+   
+
     #endregion
+    public virtual void Die() {
+        if (target.isActiveAndEnabled)
+        {
+            target.GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
+        }
+
+
+        gameObject.SetActive(false);
+    }
 
     public IEnumerator TakeDamage(int damage, char attacker)
     {
-        _health -= damage;
-        gameObject.GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
-        if (_health <= 0)
+        if (gameObject != null) // just already dead
         {
-            gameObject.SetActive(false);
-            GameManager.Static_UnitDeath(teamColor);
+            _health -= damage;
+             _rend.material.EnableKeyword("_EMISSION");
+                if (_health <= 0)
+                {
+                    GameManager.Static_UnitDeath(teamColor);
+                    Die();
+
+                }
+
         }
 
         yield return new WaitForSeconds(.5f);
-        
-        gameObject.GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
 
-        if(brain != null)
+        if (gameObject != null) // just already dead
         {
-            brain.DecreaseTileWeights(characterID[1],attacker);
+            gameObject.GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
+
+            if (brain != null)
+            {
+                brain.DecreaseTileWeights(characterID[1], attacker);
+            }
         }
 
     }

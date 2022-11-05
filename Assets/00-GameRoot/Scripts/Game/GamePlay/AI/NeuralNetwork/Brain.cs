@@ -88,8 +88,6 @@ public class Brain : AI
 
         string json = JsonUtility.ToJson(_weights);
         File.WriteAllText(dir + FILE_NAME, json);
-
-        Debug.Log("Weights have been saved!");
     }
 
     void InitaliseWeights()
@@ -127,11 +125,12 @@ public class Brain : AI
             teamColor = GameData.minMaxColor == Color.red ? Color.blue : Color.red;
         }
         string color = teamColor == Color.red ? "red" : "blue";
-        Debug.Log("Neural Network is playing as the " + color + " team");
+
+        UIManager.DisplayPlayerTeam();
         GameData.STATIC_SetGeneticAIColor(teamColor);
     }
 
-
+    
     public override void Play()
     {
         _network = new Network(FilteredUnits(), _weights);
@@ -142,8 +141,8 @@ public class Brain : AI
         move.unit.Move(move.target);
 
         _lastMove = move;
-        
 
+        Debug.Log("playing");
         base.Play();
 
     }

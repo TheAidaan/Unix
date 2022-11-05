@@ -27,7 +27,8 @@ public class UnitAttackState : UnitBaseState
         timePassed += Time.deltaTime;
         if (timePassed > script.coolDown)
         {
-            script.Attack();
+            if (script != null)
+                script.Attack();
             timePassed = 0;
         }
         

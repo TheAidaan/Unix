@@ -9,12 +9,14 @@ using System;
 
 public class UIManager : UIManager_Base
 {
+    public static UIManager instance; 
+
     bool _showTitleScreen = true;
-    bool _showSettings, _showGameModes, _showDifficultyOptions, _showAdvancedPlayOptions; //pregame
+    bool _showSettings, _showGameModes, _showDifficultyOptions; //pregame
     bool _showPauseScreen, _showGameOverScreen; //ingame
 
     [SerializeField]
-    TextMeshProUGUI _txtTitle, _txtRedTeamScore, _txtBlueTeamScore, _txtWinner;
+    TextMeshProUGUI _txtTitle, _txtRedTeamScore, _txtBlueTeamScore, _txtWinner, _txtInfo;
 
     bool _centeredTitle;
 
@@ -24,9 +26,14 @@ public class UIManager : UIManager_Base
     List<GameObject> HideOnPlay;
         
     public static event Action changeTextColor;
+    AudioSource _audioSource;
+
+
 
     private void Start()
     {
+        instance = this;
+        _audioSource = GetComponent<AudioSource>();
 
         Time.timeScale = 1;
 
@@ -42,6 +49,7 @@ public class UIManager : UIManager_Base
 
         _txtRedTeamScore.transform.parent.gameObject.SetActive(false);
         _txtBlueTeamScore.transform.parent.gameObject.SetActive(false);
+
 
        
     }
@@ -80,8 +88,30 @@ public class UIManager : UIManager_Base
             UXManager.Static_LightMode();
 
         changeTextColor?.Invoke();
+        _audioSource.Play();
 
 
+
+    }
+
+    public IEnumerator DisplayPlayerColour()
+    {
+        yield return new WaitForSeconds(0.7f);
+
+        string color = GameData.playerColor == Color.red ? "RED" : "BLUE";
+
+        _txtInfo.SetText("YOU ARE PLAYING AS THE " + color + " TEAM");
+        _txtInfo.gameObject.SetActive(true);
+
+        yield return new WaitForSeconds(2f);
+
+        _txtInfo.gameObject.SetActive(false);
+
+    }
+
+    public static void DisplayPlayerTeam()
+    {
+        instance.StartCoroutine(instance.DisplayPlayerColour());
     }
 
     public void Leave()  
@@ -113,7 +143,7 @@ public class UIManager : UIManager_Base
         _showSettings = false;
         _showGameModes = false;
         _showDifficultyOptions = false;
-        _showAdvancedPlayOptions = false;
+        _audioSource.Play();
 
         SetUI();
     }           
@@ -140,6 +170,8 @@ public class UIManager : UIManager_Base
         }
 
         UXManager.Static_SwitchToAside();
+        _audioSource.Play();
+
 
         SetUI();
     }       //done
@@ -148,6 +180,8 @@ public class UIManager : UIManager_Base
     {
         _showGameModes = true;
         _showTitleScreen = false;
+        _audioSource.Play();
+
         SetUI();
     }
 
@@ -155,16 +189,12 @@ public class UIManager : UIManager_Base
     {
         _showDifficultyOptions = true;
         _showGameModes = false;
+        _audioSource.Play();
+
         SetUI();
     }
 
-    public void ShowAdvancedPlayOptions()
-    {
-        _showAdvancedPlayOptions = true;
-        _showGameModes = false;
-        SetUI();
-    }
-
+   
     public IEnumerator StartGame()
     {
 
@@ -184,7 +214,6 @@ public class UIManager : UIManager_Base
 
         _showGameModes = false;
         _showDifficultyOptions = false;
-        _showAdvancedPlayOptions = false;
 
         GameManager.STATIC_SetGameInProgress(true);
 
@@ -209,12 +238,12 @@ public class UIManager : UIManager_Base
         _showGameOverScreen = false;
         _showPauseScreen = false;
         _showDifficultyOptions = false;
-        _showAdvancedPlayOptions = false;
 
         Time.timeScale = 1;
 
         GameManager.STATIC_SetGameInProgress(true);
 
+        _audioSource.Play();
         SetUI();
         GameManager.Static_StartGame();
     }
@@ -222,12 +251,15 @@ public class UIManager : UIManager_Base
     #region GameModes
     public void LoadMultiPlayer()
     {
+        _audioSource.Play();
+
         StartCoroutine(StartGame());
     }
     public void LoadSinglePlayer(int depth)
     {
         GameData.STATIC_SetMinMaxDepth(depth);
         GameData.STATIC_LoadMinMaxScript(true);
+        _audioSource.Play();
 
 
         StartCoroutine(StartGame());
@@ -236,6 +268,8 @@ public class UIManager : UIManager_Base
 
     public void ComplexBoard(bool loadComplexBoard)
     {
+        _audioSource.Play();
+
         if (loadComplexBoard)
             GameData.STATIC_SetBoardLength(10);
         else
@@ -250,6 +284,7 @@ public class UIManager : UIManager_Base
         GameData.STATIC_LoadMachineLearningScript(true);
         GameData.STATIC_LoadMinMaxScript(false);
 
+        _audioSource.Play();
 
 
         StartCoroutine(StartGame());
@@ -289,13 +324,13 @@ public class UIManager : UIManager_Base
     }
     public void Play()
     {
+        _audioSource.Play();
         _centeredTitle = true;
         _txtTitle.rectTransform.position = new Vector3(0f, -100f, 0f);
 
         _showPauseScreen = false;
         Time.timeScale = 1;
-
-
+       
         SetUI();
 
     }

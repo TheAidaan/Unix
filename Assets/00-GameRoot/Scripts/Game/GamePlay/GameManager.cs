@@ -94,6 +94,14 @@ public class GameManager : MonoBehaviour
         if (_gameOver)
         {
             endGame?.Invoke();
+
+            if (GameData.loadMinMaxScript)
+                Destroy(gameObject.GetComponent<MiniMax>());
+
+            if (GameData.loadMachineLearningScript)
+            {
+                Destroy(gameObject.GetComponent<Brain>());
+            }
         }
 
     }
@@ -103,8 +111,8 @@ public class GameManager : MonoBehaviour
         StartCoroutine(WaitToPlay());
     } 
     void StartGame()
-    {     
-
+    {
+        _gameOver = false;
         _blueTeamScore = 0;
         _redTeamScore = 0;
 
@@ -134,7 +142,6 @@ public class GameManager : MonoBehaviour
 
         GameData.STATIC_Restart();
 
-
         _blueTeamScore = 0;
         _redTeamScore = 0;
 
@@ -144,9 +151,14 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator WaitToPlay()
     {
+
         yield return new WaitForSeconds(2);
+
+
         if (!_gameOver)
+        
             play?.Invoke();
+     
         else
             play = null;
 
