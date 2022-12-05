@@ -20,7 +20,6 @@ public abstract class BaseUnit : MonoBehaviour
     {
         characterID = CharacterID;
         teamColor = TeamColor;
-        attackCount = 0;
 
         int layer = teamColor == Color.red ? 3:6;
         gameObject.layer = layer;
@@ -33,12 +32,9 @@ public abstract class BaseUnit : MonoBehaviour
         _audioSource = GetComponent<AudioSource>();
 
         _rend = gameObject.GetComponent<Renderer>();
-
-        targets = new List<BaseUnit>();
-
     }
 
-
+  
     #endregion
 
     #region Unit Movement
@@ -253,10 +249,8 @@ public abstract class BaseUnit : MonoBehaviour
 
     #region Attack
     public BaseUnit target;
-    public List<BaseUnit> targets;
     public Vector3 targetPos;
     public float coolDown;
-    public int attackLimit, attackCount;
 
     Renderer _rend;
     public virtual void IdleUpdate() { CheckForEnemy(); }
@@ -265,8 +259,7 @@ public abstract class BaseUnit : MonoBehaviour
 
     public virtual void Attack() 
     {
-
-        bool canAttack = ValidateAttack();
+        bool canAttack = CheckAttackValidity();
 
         if (canAttack)
         {
@@ -275,13 +268,7 @@ public abstract class BaseUnit : MonoBehaviour
                 brain.IncreaseTileWeightSimple(characterID[1],target.characterID[1]);// this was a good placement of the unit because it can attack another. It's not going to loose its brain because the attack must be proven to be successful/unsucessful
             }
             if (target != null)
-            {
-                char characterCode = characterID[1];
-                if (characterCode == 'R' || characterCode == 'M')
-                    transform.LookAt(target.transform);
-                StartCoroutine(target.TakeDamage(damage, characterID[1]));             //attack 
-
-            }
+                StartCoroutine(target.TakeDamage(damage,characterID[1]));             //attack 
         }
         else
         {
@@ -293,24 +280,12 @@ public abstract class BaseUnit : MonoBehaviour
             TransitionToState(idleState); //go back to idle
         }
     }
-    public virtual bool ValidateAttack() {
-
-        if (attackCount < attackLimit)
-        {
-            attackCount++;
-
-            if (!target.gameObject.activeSelf) //if gameObject has been set to deactive
-                return false;
-
-
-            if (target.transform.position == targetPos)
-                return true;
-
-        }
-        else
-        {
+    public virtual bool CheckAttackValidity() {
+        if (!target.gameObject.activeSelf) //if gameObject has been set to deactive
             return false;
-        }    
+
+        if (target.transform.position == targetPos)
+            return true;
 
         return false;
     }

@@ -7,8 +7,6 @@ public class MeleeUnit : BaseUnit
         maxHealth = 20;
         coolDown = 3f;
         damage = 2;
-        attackLimit = 5;
-
 
         base.Setup(TeamColor, unitColor, CharacterID);
 

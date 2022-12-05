@@ -13,10 +13,13 @@ public abstract class UnitBaseState : BaseSate<BaseUnit>
 
 public class UnitAttackState : UnitBaseState
 {
-    double timePassed=0;
+    float timePassed=0;
     public override void EnterState(BaseUnit script)
     {
-        timePassed = Double.PositiveInfinity ;
+        char characterCode = script.characterID[1];
+        if (characterCode == 'R'|| characterCode == 'M')
+            script.transform.LookAt(script.target.transform);
+        timePassed = 0;
     }
 
     public override void Update(BaseUnit script)

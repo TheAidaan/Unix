@@ -9,8 +9,6 @@ public class RangedUnit : BaseUnit
         maxHealth = 18;
         coolDown = 3f;
         damage = 2;
-        attackLimit = 4;
-
 
         base.Setup(TeamColor, unitColor, characterID);
 
