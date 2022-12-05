@@ -65,9 +65,20 @@ public class WizardUnit : BaseUnit
                             TransitionToState(attackState);  //if in idle it will search for enemies, if atleast one is found it will transition to attack and gather all the enemies it can attack
                             break;
                     }
+                    bool invalidTarget = false; //innocent until proven guilty 
 
                     if (!GameManager.aiEvaluationInProgress)
                     {
+                        foreach (TargetTracker targetCheck in invalidTargets)
+                        {
+                            if (targetCheck.id == target.characterID && targetCheck.tile == target.currentTile.tileID)
+                                invalidTarget = true;
+                        }
+
+                        if (invalidTarget)
+                            continue;
+                        else
+                            _targets.Add(target);
 
                     }
                     else
