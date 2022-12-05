@@ -2,6 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+public struct TargetTracker
+{
+   public  string id;
+    public string tile;
+
+    public TargetTracker(string ID, string Tile)
+    {
+        id = ID;
+        tile = Tile;
+    }
+}
 public abstract class BaseUnit : MonoBehaviour
 {
     public Brain brain;
@@ -21,6 +33,7 @@ public abstract class BaseUnit : MonoBehaviour
         characterID = CharacterID;
         teamColor = TeamColor;
         attackCount = 0;
+        invalidTargets = new List<TargetTracker>();
 
         int layer = teamColor == Color.red ? 3:6;
         gameObject.layer = layer;
@@ -141,6 +154,7 @@ public abstract class BaseUnit : MonoBehaviour
         if (!GameManager.aiEvaluationInProgress)
         {
             TransitionToState(idleState);
+            invalidTargets.Clear();
             GameManager.Static_SwitchSides(teamColor, characterID, targetTile.tileID);
             _audioSource.Play();
         }
@@ -254,6 +268,7 @@ public abstract class BaseUnit : MonoBehaviour
     #region Attack
     public BaseUnit target;
     public List<BaseUnit> targets;
+    public List<TargetTracker> invalidTargets;
     public Vector3 targetPos;
     public float coolDown;
     public int attackLimit, attackCount;
@@ -309,6 +324,9 @@ public abstract class BaseUnit : MonoBehaviour
         }
         else
         {
+            attackCount = 0;
+            TargetTracker invalidtarget = new TargetTracker(target.characterID, target.currentTile.tileID);
+            invalidTargets.Add(invalidtarget);
             return false;
         }    
 

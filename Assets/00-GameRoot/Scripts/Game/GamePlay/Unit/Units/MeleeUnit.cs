@@ -21,7 +21,6 @@ public class MeleeUnit : BaseUnit
     public override BaseUnit CheckForEnemy()
     {
         RaycastHit[] hit = Physics.SphereCastAll(transform.position, 15f, Vector3.down);
-
         foreach (RaycastHit Hit in hit)
         {
             if (Hit.transform.gameObject.layer != transform.gameObject.layer)
@@ -29,16 +28,33 @@ public class MeleeUnit : BaseUnit
                 BaseUnit Target = Hit.transform.gameObject.GetComponent<BaseUnit>();
                 if (Target != null)
                 {
-                    target = Target;
+                    bool invalidTarget = false; //innocent until proven guilty 
 
                     if (!GameManager.aiEvaluationInProgress)
                     {
-                        targetPos = Target.transform.position;
-                        TransitionToState(attackState);
-                        break;
+                        foreach (TargetTracker target in invalidTargets)
+                        {
+                            if (target.id == Target.characterID && target.tile == Target.currentTile.tileID)
+                                invalidTarget = true;
+
+                        }
+
+                        if (invalidTarget)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            targetPos = Target.transform.position;
+                            TransitionToState(attackState);
+                            target = Target;
+
+                            break;
+                        }
+
                     }
 
-                    return target;
+                    return Target;
                 }
             }
         }

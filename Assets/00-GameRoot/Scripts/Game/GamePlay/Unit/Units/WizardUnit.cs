@@ -66,7 +66,15 @@ public class WizardUnit : BaseUnit
                             break;
                     }
 
-                    _targets.Add(target);
+                    if (!GameManager.aiEvaluationInProgress)
+                    {
+
+                    }
+                    else
+                    {
+                        _targets.Add(target); //a theoretical evaluation should not include the invalid check because if the unit is moved the invalid units lst will be cleared.
+
+                    }
                 }
             }         
         }
