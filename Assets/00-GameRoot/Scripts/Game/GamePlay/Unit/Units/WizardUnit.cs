@@ -8,7 +8,6 @@ public class WizardUnit : BaseUnit
     {
         maxHealth = 15;
         coolDown = 4f;
-        attackLimit = 3;
         base.Setup(TeamColor, unitColor, characterID);
 
         GetComponent<MeshFilter>().mesh = Resources.Load<Mesh>("Models/Wizard");
