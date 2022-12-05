@@ -3,11 +3,12 @@ using UnityEngine;
 
 public class WizardUnit : BaseUnit
 {
-    List<BaseUnit> _targets;
+
     public override void Setup(Color TeamColor, Color32 unitColor, string characterID)
     {
         maxHealth = 15;
         coolDown = 4f;
+        attackLimit = 3;
         base.Setup(TeamColor, unitColor, characterID);
 
         GetComponent<MeshFilter>().mesh = Resources.Load<Mesh>("Models/Wizard");
@@ -49,7 +50,7 @@ public class WizardUnit : BaseUnit
     #region Attack
     public override List<BaseUnit> CheckForEnemies(bool checkForReturn) // this unit also checks for eneimies to attack while attacking
     {
-        List<BaseUnit> targets = new List<BaseUnit>();
+        List<BaseUnit> _targets = new List<BaseUnit>();
 
         RaycastHit[] hit = Physics.SphereCastAll(transform.position, 15f, Vector3.down);
         foreach (RaycastHit Hit in hit)
@@ -61,25 +62,24 @@ public class WizardUnit : BaseUnit
                 {
                     if (!GameManager.aiEvaluationInProgress && !checkForReturn) // if there is no evaluation in progress and this function is NOT being called for a return value
                     {
-                        
-                            TransitionToState(attackState); 
+                            TransitionToState(attackState);  //if in idle it will search for enemies, if atleast one is found it will transition to attack and gather all the enemies it can attack
                             break;
                     }
 
-                    targets.Add(target);
+                    _targets.Add(target);
                 }
             }         
         }
-        return targets;
+        return _targets;
     }
 
 
     public override void Attack()
     {
         List<char> targetChar = new List<char>();
-        _targets = CheckForEnemies(true);
+        targets = CheckForEnemies(true);
 
-        if (_targets.Count == 0)
+        if (targets.Count == 0)
         {
             if (brain != null)
             {
@@ -90,7 +90,7 @@ public class WizardUnit : BaseUnit
             TransitionToState(idleState);
         }
 
-        foreach (BaseUnit target in _targets)
+        foreach (BaseUnit target in targets)
         {
             if (target.isActiveAndEnabled)
             {
@@ -103,14 +103,14 @@ public class WizardUnit : BaseUnit
         {
             brain.IncreaseTileWeightWizard(targetChar);
         }
-        _targets.Clear();
+        targets.Clear();
 
     }
 
     public override void Die() {
-        if (_targets.Count != 0 && gameObject != null)
+        if (targets.Count != 0 && gameObject != null)
         {
-            foreach (BaseUnit target in _targets)
+            foreach (BaseUnit target in targets)
             {
                 if (target != null)
                  target.GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
