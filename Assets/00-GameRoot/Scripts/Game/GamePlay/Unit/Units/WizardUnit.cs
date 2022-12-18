@@ -71,14 +71,20 @@ public class WizardUnit : BaseUnit
                     {
                         foreach (TargetTracker targetCheck in invalidTargets)
                         {
-                            if (targetCheck.id == target.characterID && targetCheck.tile == target.currentTile.tileID)
+                            if (targetCheck.id == target.characterID && targetCheck.tile == target.currentTile.tileID && targetCheck.attackCount == attackLimit)
                                 invalidTarget = true;
+
                         }
 
                         if (invalidTarget)
                             continue;
                         else
+                        {
+                            TargetTracker newtarget = new TargetTracker(target.characterID, target.currentTile.tileID);
+                            invalidTargets.Add(newtarget);
                             _targets.Add(target);
+
+                        }
 
                     }
                     else
@@ -113,8 +119,14 @@ public class WizardUnit : BaseUnit
         {
             if (target.isActiveAndEnabled)
             {
-                StartCoroutine(target.TakeDamage(4, characterID[1])); //attack       
-                targetChar.Add(target.characterID[1]);
+                StartCoroutine(target.TakeDamage(2, characterID[1])); //attack
+                foreach (TargetTracker targetCheck in invalidTargets)
+                {
+                    if (targetCheck.id == target.characterID && targetCheck.tile == target.currentTile.tileID)
+                        targetCheck.attackCount++;
+                }
+
+                    targetChar.Add(target.characterID[1]);
             }
             
         }
@@ -131,12 +143,11 @@ public class WizardUnit : BaseUnit
         {
             foreach (BaseUnit target in targets)
             {
-                if (target != null)
                  target.GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
 
             }
         }
-
+        HideHighlightedTiles();
 
         gameObject.SetActive(false);
     }

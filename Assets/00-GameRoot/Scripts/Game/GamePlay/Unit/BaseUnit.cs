@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public struct TargetTracker
+public class TargetTracker
 {
-   public  string id;
+    public  string id;
     public string tile;
+    public int attackCount;
 
     public TargetTracker(string ID, string Tile)
     {
         id = ID;
         tile = Tile;
+        attackCount = 0;
     }
+
 }
 public abstract class BaseUnit : MonoBehaviour
 {
@@ -33,6 +36,7 @@ public abstract class BaseUnit : MonoBehaviour
         characterID = CharacterID;
         teamColor = TeamColor;
         attackCount = 0;
+        died = false;
         invalidTargets = new List<TargetTracker>();
 
         int layer = teamColor == Color.red ? 3:6;
@@ -255,6 +259,10 @@ public abstract class BaseUnit : MonoBehaviour
     {
         if(gameObject!=null) //just in case it was destroyed between frames
          currentState.Update(this);
+        else
+        {
+            Debug.Log("here");
+        }
     }
     public void TransitionToState(UnitBaseState state)
     {
@@ -272,7 +280,7 @@ public abstract class BaseUnit : MonoBehaviour
     public Vector3 targetPos;
     public float coolDown;
     public int attackLimit, attackCount;
-
+    bool died;
     Renderer _rend;
     public virtual void IdleUpdate() { CheckForEnemy(); }
     public virtual BaseUnit CheckForEnemy() { return null; }
@@ -296,6 +304,10 @@ public abstract class BaseUnit : MonoBehaviour
                     transform.LookAt(target.transform);
                 StartCoroutine(target.TakeDamage(damage, characterID[1]));             //attack 
 
+            }
+            else
+            {
+                Debug.Log("here");
             }
         }
         else
@@ -337,28 +349,30 @@ public abstract class BaseUnit : MonoBehaviour
 
     #endregion
     public virtual void Die() {
+
         if (target.isActiveAndEnabled)
         {
             target.GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
         }
 
+        HideHighlightedTiles();
 
         gameObject.SetActive(false);
     }
 
     public IEnumerator TakeDamage(int damage, char attacker)
     {
+        bool dead = false;
         if (gameObject != null) // just already dead
         {
             _health -= damage;
              _rend.material.EnableKeyword("_EMISSION");
                 if (_health <= 0)
-                {
-                    GameManager.Static_UnitDeath(teamColor);
-                    Die();
+                    dead = true;
 
-                }
+            
         }
+       
 
         yield return new WaitForSeconds(.5f);
 
@@ -372,6 +386,12 @@ public abstract class BaseUnit : MonoBehaviour
             }
         }
 
+        if (dead && !died)
+        {
+            GameManager.Static_UnitDeath(teamColor);
+            Die();
+            died = true;
+        }
     }
 
     #region MachineLearning

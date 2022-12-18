@@ -375,7 +375,7 @@ public class UIManager : UIManager_Base
         _txtWinner.text = winningTeam + " team Won!";
         _txtWinner.color = vertexColor;
 
-        GameManager.endGame -= EndGame;
+
         foreach(GameObject obj in HideOnPlay)
         {
             gameObject.SetActive(true);

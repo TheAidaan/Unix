@@ -13,7 +13,7 @@ public class UnitManager : MonoBehaviour
     char[] _unitOrder = new char[12]
     {
                 'R','M','W','M','R','M',
-                'M','R','W','R','M','M'
+                'M','R','W','R','M','R'
     };
 
     Dictionary<char, Type> _unitLibrary = new Dictionary<char, Type>()
@@ -145,16 +145,13 @@ public class UnitManager : MonoBehaviour
     public void SwitchSides(Color colortThatJustPlayed)
     {
 
-
-
-            bool isRedTurn = colortThatJustPlayed == Color.red ? false : true;
+     bool isRedTurn = colortThatJustPlayed == Color.red ? false : true;
 
 
             //set the interactivity
             SetInteractive(GameData.redUnits, isRedTurn);
             SetInteractive(GameData.blueUnits, !isRedTurn);
 
-        if (GameData.playerColor == Color.red)
 
             if (GameData.playerColor == colortThatJustPlayed) // the player just went and it is the ai's turn  {
             {

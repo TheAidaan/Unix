@@ -26,6 +26,10 @@ public class UnitAttackState : UnitBaseState
         {
             if (script != null)
                 script.Attack();
+            else
+            {
+                Debug.Log("here");
+            }
             timePassed = 0;
         }
         
